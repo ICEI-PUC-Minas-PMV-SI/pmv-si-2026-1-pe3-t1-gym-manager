@@ -6,20 +6,21 @@
 
 `SEMESTRE: 3º`
 
-Descrever resumidamente, em um ou dois parágrafos, o projeto que está sendo desenvolvido.
+Os sistemas de gerenciamento são ferramentas desenvolvidas para coletar, armazenar, processar e disponibilizar informações de maneira estruturada, auxiliando gestores na tomada de decisões estratégicas e operacionais. No contexto das academias, tais sistemas podem centralizar informações financeiras, cadastrais e operacionais, reduzir erros decorrentes de controles manuais e otimizar o tempo dedicado a tarefas administrativas. Além disso, possibilitam a geração de relatórios e indicadores de desempenho, contribuindo para uma gestão mais transparente e orientada por dados.
+
 
 ## Integrantes
 
-* Nome completo do aluno 1
-* Nome completo do aluno 2
-* Nome completo do aluno 3
-* Nome completo do aluno 4
-* Nome completo do aluno 5
-* Nome completo do aluno 6
+* Guilherme Borges Matos Faccion,
+* Luan Ricardo de Oliveira Santos,
+* Sharon Jacoe Borges,
+* Vitor Guimarães Pessoa Santos,
+* Yoná de Carvalho,
+
 
 ## Orientador
 
-* Nome completo do professor 
+* Fábio Martins de Oliveira
 
 # Planejamento
 
