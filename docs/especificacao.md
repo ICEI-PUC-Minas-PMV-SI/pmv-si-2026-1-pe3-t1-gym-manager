@@ -59,9 +59,9 @@ O sistema operará de forma estrita como uma ferramenta de  backoffice. Sendo as
 
 | Ator | Descrição |
 |--------------------|------------------------------------|
-| Coordenador |	Usuário gerente do sistema responsável pelo cadastro e manutenção de cursos de aperfeiçoamento. Possui acesso geral ao sistema. |
-| Secretaria |	Usuário responsável por registros de alunos, professores, turmas e gerência de matrículas. |
-| ... |	... |	... |
+| Gestor / Administrador |	Usuário com privilégios máximos no sistema. Responsável pela tomada de decisão estratégica, possui acesso integral aos relatórios gerenciais, dashboards, configurações globais da plataforma e gestão do quadro de funcionários (recepcionistas e instrutores) |
+| Recepcionista |	Usuário de nível operacional. Responsável pelo fluxo diário de front-desk, possuindo permissões para realizar o cadastro de alunos, registrar o check-in manual de presenças, matricular clientes em planos e gerenciar o agendamento de turmas e aulas |
+| Instrutor |	Usuário com permissões restritas. Acessa o sistema primordialmente para fins de consulta operacional, visualizando suas próprias agendas, modalidades sob sua responsabilidade e a lista de alunos inscritos em suas respectivas aulas, sem acesso a dados financeiros ou configurações globais |
 
 ## 3.4 Modelagem do Sistema
 
