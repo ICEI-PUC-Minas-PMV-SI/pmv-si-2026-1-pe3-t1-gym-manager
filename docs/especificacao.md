@@ -20,10 +20,10 @@ O sistema operará de forma estrita como uma ferramenta de  backoffice. Sendo as
 
 | # | Benefício | Valor para o Cliente |
 |--------------------|------------------------------------|----------------------------------------|
-|1	| Facilidade no cadastro de dados |	Essencial |
-|2 | Facilidade na recuperação de informações | Essencial | 
-|3 | Segurança no cadastro de matrículas | Essencial | 
-|4	| Melhoria na comunicação com os alunos	| Recomendável | 
+|1	| Centralização e integridade dos dados |	Essencial |
+|2 | Agilidade operacional | Essencial | 
+|3 | Suporte à tomada de decisão | Essencial | 
+|4	| Rastreabilidade organizacional	| Recomendável | 
 
 ## 3.3 Descrição geral do produto
 
@@ -31,10 +31,17 @@ O sistema operará de forma estrita como uma ferramenta de  backoffice. Sendo as
 
 | Código | Requisito Funcional (Funcionalidade) | Descrição |
 |--------------------|------------------------------------|----------------------------------------|
-| RF1 | Gerenciar Curso de Aperfeiçoamento |	Processamento de Inclusão, Alteração, Exclusão e Consulta de Cursos de Aperfeiçoamento |
-| RF2 |	Gerenciar Professor	| Processamento de Inclusão, Alteração, Exclusão e Consulta de professores |
-| RF3	| Gerenciar Matrícula |	Processamento de Inclusão, Alteração, Exclusão e Consulta de Matrículas de alunos em Cursos de Aperfeiçoamento |
-| ... |	...	| ... |
+| RF01 | Realizar Autenticação |	O sistema deve permitir o login e logout de usuários (funcionários) mediante credenciais seguras, direcionando-os para suas respectivas áreas de acesso |
+| RF02 |	Gerenciar Usuários do Sistema	| O sistema deve permitir cadastrar, consultar, editar e excluir (ou inativar) usuários que terão acesso à plataforma (ex: Administrador, Recepcionista), definindo seus níveis de permissão |
+| RF03	| Gerenciar Instrutores |	O sistema deve permitir o cadastro de instrutores, vinculando suas especialidades e horários de trabalho |
+| RF03	| Gerenciar Alunos |	O sistema deve permitir registrar os dados cadastrais dos alunos, matricular em planos, e registrar sua frequência (check-in) |
+| RF03	| Gerenciar Modalidades |	O sistema deve permitir o cadastro de diferentes categorias de atividades oferecidas pela academia (ex: Musculação, Spinning, Pilates) |
+| RF03	| Gerenciar Turmas |	O sistema deve permitir a criação de turmas específicas para as modalidades |
+| RF03	| Gerenciar Aulas |	O sistema deve permitir o agendamento de aulas específicas, vinculando uma data/horário, a modalidade correspondente, a turma e o instrutor responsável |
+| RF03	| Emitir Relatórios Gerenciais |	O sistema deve processar e exportar dados consolidados em formato de relatório. Isso inclui: alunos inscritos por aula, inadimplência, frequência de alunos e relatórios de usuários |
+| RF03	| Visualizar Dashboard de Indicadores |	O sistema deve apresentar graficamente indicadores em tempo real para tomada de decisão (ex: total de aulas do dia, ocupação, alunos ativos) |
+| RF03	| Gerenciar Conteúdo Informacional (Mural/Landing Page) |	O sistema deve permitir o cadastro e exibição de avisos, recomendações ou comunicados gerais para a equipe na tela inicial |
+
 
 ### 3.3.2 Requisitos Não Funcionais
 
