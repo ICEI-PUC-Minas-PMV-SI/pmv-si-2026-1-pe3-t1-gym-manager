@@ -48,10 +48,12 @@ O sistema operará de forma estrita como uma ferramenta de  backoffice. Sendo as
 
 | Código | Requisito Não Funcional (Restrição) |
 |--------------------|------------------------------------|
-| RNF1 | O ambiente operacional a ser utilizado é o Windows XP. |
-| RNF2 | O sistema deverá executar em um computador configurado com uma impressora de tecnologia laser ou de jato de tinta, a ser usada para impressão dos relatórios. |
-| RNF3 |	Segurança	O produto deve restringir o acesso por meio de senhas individuais para o usuário. |
-| ... |	... |	... |
+| RNF01 | O sistema deve possuir uma interface intuitiva de modo que um novo funcionário (recepcionista ou instrutor) seja capaz de operar as funções básicas de cadastro e consulta após um treinamento de, no máximo, 1 hora |
+| RNF02 | O tempo de processamento para o carregamento da tela inicial (dashboard) e para a geração de relatórios gerenciais consolidados não deve ultrapassar 5 segundos sob condições normais de conexão |
+| RNF03 |	O produto deve restringir o acesso por meio de senhas individuais e aplicar um controle de permissões baseado em papéis (RBAC), garantindo que um usuário "Recepcionista" não tenha acesso às configurações globais do perfil "Administrador" |
+| RNF04 |	O sistema deve possuir um código-fonte modularizado, facilitando a identificação de falhas e a futura inclusão de novas funcionalidades pela equipe de desenvolvimento |
+| RNF05 |	A arquitetura do sistema web deve ser projetada para operar 24 horas por dia, 7 dias por semana, assegurando uma taxa de disponibilidade (uptime) de 99% mensalmente |
+
 
 ### 3.3.3 Usuários 
 
