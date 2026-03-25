@@ -34,13 +34,14 @@ O sistema operará de forma estrita como uma ferramenta de  backoffice. Sendo as
 | RF01 | Realizar Autenticação |	O sistema deve permitir o login e logout de usuários (funcionários) mediante credenciais seguras, direcionando-os para suas respectivas áreas de acesso |
 | RF02 |	Gerenciar Usuários do Sistema	| O sistema deve permitir cadastrar, consultar, editar e excluir (ou inativar) usuários que terão acesso à plataforma (ex: Administrador, Recepcionista), definindo seus níveis de permissão |
 | RF03	| Gerenciar Instrutores |	O sistema deve permitir o cadastro de instrutores, vinculando suas especialidades e horários de trabalho |
-| RF03	| Gerenciar Alunos |	O sistema deve permitir registrar os dados cadastrais dos alunos, matricular em planos, e registrar sua frequência (check-in) |
-| RF03	| Gerenciar Modalidades |	O sistema deve permitir o cadastro de diferentes categorias de atividades oferecidas pela academia (ex: Musculação, Spinning, Pilates) |
-| RF03	| Gerenciar Turmas |	O sistema deve permitir a criação de turmas específicas para as modalidades |
-| RF03	| Gerenciar Aulas |	O sistema deve permitir o agendamento de aulas específicas, vinculando uma data/horário, a modalidade correspondente, a turma e o instrutor responsável |
-| RF03	| Emitir Relatórios Gerenciais |	O sistema deve processar e exportar dados consolidados em formato de relatório. Isso inclui: alunos inscritos por aula, inadimplência, frequência de alunos e relatórios de usuários |
-| RF03	| Visualizar Dashboard de Indicadores |	O sistema deve apresentar graficamente indicadores em tempo real para tomada de decisão (ex: total de aulas do dia, ocupação, alunos ativos) |
-| RF03	| Gerenciar Conteúdo Informacional (Mural/Landing Page) |	O sistema deve permitir o cadastro e exibição de avisos, recomendações ou comunicados gerais para a equipe na tela inicial |
+| RF04	| Gerenciar Alunos |	O sistema deve permitir registrar os dados cadastrais dos alunos, matricular em planos, e registrar sua frequência (check-in) |
+| RF05	| Gerenciar Modalidades |	O sistema deve permitir o cadastro de diferentes categorias de atividades oferecidas pela academia (ex: Musculação, Spinning, Pilates) |
+| RF06	| Gerenciar Turmas |	O sistema deve permitir a criação de turmas específicas para as modalidades |
+| RF07	| Gerenciar Aulas |	O sistema deve permitir o agendamento de aulas específicas, vinculando uma data/horário, a modalidade correspondente, a turma e o instrutor responsável |
+| RF08	| Emitir Relatórios Gerenciais |	O sistema deve gerar relatórios estruturados e exportáveis referentes aos cadastros e às operações diárias da academia |
+| RF09	| Visualizar Dashboard de Indicadores |	O sistema deve apresentar graficamente indicadores em tempo real para tomada de decisão (ex: total de aulas do dia, ocupação, alunos ativos) |
+| RF10	| Gerenciar Conteúdo Informacional (Mural/Landing Page) |	O sistema deve permitir o cadastro e exibição de avisos, recomendações ou comunicados gerais para a equipe na tela inicial |
+| RF11 | Gerir Configurações do Sistema |	O sistema deve permitir que utilizadores com privilégios de administrador ajustem parâmetros globais de funcionamento da plataforma |
 
 
 ### 3.3.2 Requisitos Não Funcionais
