@@ -66,7 +66,6 @@ O sistema operará de forma estrita como uma ferramenta de  backoffice. Sendo as
 ## 3.4 Modelagem do Sistema
 
 ### 3.4.1 Diagrama de Casos de Uso
-Como observado no diagrama de casos de uso da Figura 1, a secretária poderá gerenciar as matrículas e professores no sistema, enquanto o coordenador, além dessas funções, poderá gerenciar os cursos de aperfeiçoamento.
 
 #### Figura 1: Diagrama de Casos de Uso do Sistema.
 
@@ -165,6 +164,27 @@ Como observado no diagrama de casos de uso da Figura 1, a secretária poderá ge
 3. O Gestor seleciona a operação desejada ou finaliza.
 4. Se desejar continuar, retorna ao passo 2; caso contrário, termina.
 
+#### Fluxo Alternativo — Inclusão
+- a) O Gestor requisita a inclusão de um instrutor.
+- b) O Sistema apresenta formulário solicitando Nome, CPF, E-mail, 
+   Telefone, CREF e Especialidades.
+- c) O Gestor preenche os dados e aciona o salvamento.
+- d) O Sistema verifica se o CPF já existe; se sim, exibe erro; 
+   se não, o instrutor é adicionado à lista.
+
+#### Fluxo Alternativo — Alteração
+- a) O Gestor seleciona um instrutor e altera os dados desejados.
+- b) O Sistema valida e atualiza o cadastro.
+
+#### Fluxo Alternativo — Inativação
+- a) O Gestor seleciona um instrutor e requisita sua inativação.
+- b) O Sistema altera o status para inativo, impedindo sua 
+   vinculação a novas aulas.
+
+#### Fluxo Alternativo — Consulta
+- a) O Gestor pesquisa por nome ou CREF.
+- b) O Sistema retorna a lista filtrada de instrutores.
+
 **Pós-condições:** Os dados de um instrutor foram atualizados no sistema.
 
 ### CSU05 — Gerenciar Modalidades
@@ -179,6 +199,22 @@ Como observado no diagrama de casos de uso da Figura 1, a secretária poderá ge
 1. O Gestor acessa o módulo de modalidades.
 2. O Sistema apresenta as opções de criar nova modalidade, editar nome/descrição, ou inativar uma modalidade existente.
 3. O Gestor executa a ação e o Sistema valida se o nome da modalidade já existe antes de salvar.
+
+#### Fluxo Alternativo — Inclusão
+- a) O Gestor requisita a criação de uma nova modalidade.
+- b) O Sistema solicita Nome e Descrição.
+- c) O Sistema verifica se já existe uma modalidade com o mesmo 
+   nome; se sim, exibe erro; se não, salva e atualiza o catálogo.
+  
+#### Fluxo Alternativo — Alteração
+- a) O Gestor seleciona uma modalidade existente e edita 
+   nome ou descrição.
+- b) O Sistema valida e salva as alterações.
+
+#### Fluxo Alternativo — Inativação
+- a) O Gestor seleciona uma modalidade e requisita sua inativação.
+- b) O Sistema verifica se há turmas ou aulas ativas vinculadas; 
+   se sim, alerta o Gestor; se não, inativa a modalidade.
 
 **Pós-condições:** O catálogo de modalidades da academia é atualizado.
 
@@ -208,10 +244,26 @@ Como observado no diagrama de casos de uso da Figura 1, a secretária poderá ge
 
 #### Fluxo Principal
 1. O Usuário requisita a gestão de turmas.
-2. O Sistema permite incluir uma nova turma, associando-a a uma modalidade existente e definindo o seu nível (ex.: Iniciante, Avançado).
+2. O Sistema permite incluir uma nova turma, associando-a a uma modalidade existente.
 3. O usuário também pode alocar alunos específicos a esta turma.
-4. O Sistema guarda as alterações e atualiza a capacidade da turma.
+4. O Sistema guarda as alterações e atualiza a turma.
 
+#### Fluxo Alternativo — Inclusão
+- a) O Usuário requisita a criação de uma turma.
+- b) O Sistema solicita Nome e Modalidade associada.
+- c) O Sistema valida os dados e salva a nova turma.
+
+#### Fluxo Alternativo — Alocação de Alunos
+- a) O Usuário seleciona uma turma e requisita adicionar alunos.
+   nome ou descrição.
+- b) O Sistema apresenta a lista de alunos ativos.
+- c) O Usuário seleciona os alunos e confirma.
+- d) O Sistema valida e salva.
+
+#### Fluxo Alternativo — Alteração
+- a) O Usuário seleciona uma turma e edita seus dados.
+- b) O Sistema valida e salva as alterações.
+  
 **Pós-condições:** A estruturação das turmas da academia é definida e atualizada no banco de dados.
 
 ### CSU08 — Consultar Indicadores
@@ -243,6 +295,11 @@ Como observado no diagrama de casos de uso da Figura 1, a secretária poderá ge
 3. O Gestor seleciona o tipo e aplica filtros (ex.: intervalo de datas).
 4. O Gestor clica em **"Gerar"**.
 5. O Sistema processa as informações e disponibiliza a exportação do arquivo (PDF ou Excel).
+
+#### Fluxo de Exceção — Sem dados no período
+- a) Se não houver registros no intervalo de datas selecionado, 
+   o Sistema exibe a mensagem "Nenhum dado encontrado para 
+   o período informado" e retorna ao passo 3.
 
 **Pós-condições:** Um relatório gerencial é extraído do sistema.
 
