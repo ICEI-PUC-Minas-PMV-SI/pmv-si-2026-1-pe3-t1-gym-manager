@@ -16,6 +16,7 @@ Os sistemas de gerenciamento são ferramentas desenvolvidas para coletar, armaze
 * Sharon Jacoe Borges,
 * Vitor Guimarães Pessoa Santos,
 * Yoná de Carvalho,
+* Mateus Valadares de Oliveira Freitas.
 
 
 ## Orientador
