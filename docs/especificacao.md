@@ -83,7 +83,7 @@ Como observado no diagrama de casos de uso da Figura 1, a secretária poderá ge
 **Ator Secundário:** Não possui.  
 **Pré-condições:** O usuário deve possuir um cadastro ativo no sistema.
 
-### Fluxo Principal
+#### Fluxo Principal
 1. O usuário informa o e-mail/usuário e senha.
 2. O Sistema realiza a validação das credenciais informadas.
 3. Se o usuário informou a senha errada ou usuário inativo, o sistema apresenta mensagem de erro **"Credenciais Inválidas"** e o caso de uso retorna ao passo 1; caso contrário, o caso de uso termina.
@@ -98,27 +98,27 @@ Como observado no diagrama de casos de uso da Figura 1, a secretária poderá ge
 **Ator Secundário:** Não possui.  
 **Pré-condições:** O Gestor deve estar autenticado no sistema.
 
-### Fluxo Principal
+#### Fluxo Principal
 1. O Gestor requisita a gestão de usuários.
 2. O Sistema apresenta as operações que podem ser realizadas: inclusão de novo usuário, alteração de dados, inativação de acesso e consulta por nome ou CPF.
 3. O Gestor seleciona a operação desejada: Inclusão, Alteração, Inativação ou Consulta, ou opta por finalizar o caso de uso.
 4. Se o Gestor desejar continuar com a gestão, o caso de uso retorna ao passo 2; caso contrário, o caso de uso termina.
 
-### Fluxo Alternativo — Inclusão
+#### Fluxo Alternativo — Inclusão
 - a) O Gestor requisita a inclusão de um usuário.
 - b) O Sistema apresenta uma janela solicitando Nome, CPF, E-mail, Senha Provisória e Nível de Acesso (Gestor, Recepcionista ou Instrutor).
 - c) O Gestor preenche os dados e aciona o salvamento.
 - d) O Sistema verifica se o CPF/E-mail já existem; se sim, exibe erro; se não, a grade listando os usuários é atualizada.
 
-### Fluxo Alternativo — Alteração
+#### Fluxo Alternativo — Alteração
 - a) O Gestor seleciona um usuário para edição, altera os dados permitidos e requisita a atualização.
 - b) O Sistema verifica a validade e altera os dados no cadastro.
 
-### Fluxo Alternativo — Inativação
+#### Fluxo Alternativo — Inativação
 - a) O Gestor seleciona um usuário e requisita a inativação do seu acesso.
 - b) O Sistema altera o status do usuário para inativo, bloqueando futuros logins.
 
-### Fluxo Alternativo — Consulta
+#### Fluxo Alternativo — Consulta
 - a) O Gestor opta por pesquisar informando o Nome ou CPF na barra de busca.
 - b) O Sistema apresenta a lista filtrada de usuários correspondentes.
 
@@ -132,20 +132,20 @@ Como observado no diagrama de casos de uso da Figura 1, a secretária poderá ge
 **Ator Secundário:** Não possui.  
 **Pré-condições:** A Recepcionista deve estar autenticada no sistema.
 
-### Fluxo Principal
+#### Fluxo Principal
 1. A Recepcionista requisita a gestão de alunos.
 2. O Sistema apresenta as operações que podem ser realizadas: inclusão, alteração, inativação, consulta e registro de presença.
 3. A Recepcionista seleciona a operação desejada ou opta por finalizar o caso de uso.
 4. Se a Recepcionista desejar continuar, o caso de uso retorna ao passo 2; caso contrário, termina.
 
-### Fluxo Alternativo — Inclusão
+#### Fluxo Alternativo — Inclusão
 - a) A Recepcionista requisita a inclusão preenchendo os dados pessoais e de contato do aluno.
 - b) O Sistema valida os dados e guarda o novo registro.
 
-### Fluxo Alternativo — Alteração / Inativação / Consulta
+#### Fluxo Alternativo — Alteração / Inativação / Consulta
 - a) Segue a mesma lógica do CSU02: pesquisa-se o aluno e edita-se ou inativa-se o seu cadastro.
 
-### Fluxo Alternativo — Registro de Presença (Check-in)
+#### Fluxo Alternativo — Registro de Presença (Check-in)
 - a) A Recepcionista localiza o aluno e clica em **"Registrar Presença"**.
 - b) O Sistema verifica se o aluno está com o cadastro ativo. Se sim, exibe um alerta e impede o registro. Se não, vincula a presença à data e hora atuais e exibe uma confirmação de sucesso.
 
@@ -159,7 +159,7 @@ Como observado no diagrama de casos de uso da Figura 1, a secretária poderá ge
 **Ator Secundário:** Não possui.  
 **Pré-condições:** O Gestor deve estar autenticado no sistema.
 
-### Fluxo Principal
+#### Fluxo Principal
 1. O Gestor requisita a gestão de instrutores.
 2. O Sistema apresenta as operações: inclusão, alteração, inativação e consulta.
 3. O Gestor seleciona a operação desejada ou finaliza.
@@ -175,7 +175,7 @@ Como observado no diagrama de casos de uso da Figura 1, a secretária poderá ge
 **Ator Secundário:** Não possui.  
 **Pré-condições:** O Gestor deve estar autenticado.
 
-### Fluxo Principal
+#### Fluxo Principal
 1. O Gestor acessa o módulo de modalidades.
 2. O Sistema apresenta as opções de criar nova modalidade, editar nome/descrição, ou inativar uma modalidade existente.
 3. O Gestor executa a ação e o Sistema valida se o nome da modalidade já existe antes de salvar.
@@ -190,7 +190,7 @@ Como observado no diagrama de casos de uso da Figura 1, a secretária poderá ge
 **Ator Secundário:** Instrutor.  
 **Pré-condições:** O usuário deve estar autenticado no sistema.
 
-### Fluxo Principal
+#### Fluxo Principal
 1. O Usuário requisita a gestão de aulas.
 2. Se o Usuário for **Instrutor**, o Sistema apresenta apenas a operação de consulta da sua própria agenda.
 3. Se o Usuário for **Gestor** ou **Recepcionista**, o Sistema apresenta as operações de Inclusão (definindo horário, local, instrutor e modalidade), Alteração, Cancelamento (Exclusão) e Consulta.
@@ -206,7 +206,7 @@ Como observado no diagrama de casos de uso da Figura 1, a secretária poderá ge
 **Ator Secundário:** Não possui.  
 **Pré-condições:** Usuário autenticado.
 
-### Fluxo Principal
+#### Fluxo Principal
 1. O Usuário requisita a gestão de turmas.
 2. O Sistema permite incluir uma nova turma, associando-a a uma modalidade existente e definindo o seu nível (ex.: Iniciante, Avançado).
 3. O usuário também pode alocar alunos específicos a esta turma.
@@ -222,7 +222,7 @@ Como observado no diagrama de casos de uso da Figura 1, a secretária poderá ge
 **Ator Secundário:** Não possui.  
 **Pré-condições:** Gestor autenticado no sistema.
 
-### Fluxo Principal
+#### Fluxo Principal
 1. O Gestor seleciona a tela de Dashboard.
 2. O Sistema compila os dados do dia (total de check-ins, aulas ativas, alunos matriculados).
 3. O Sistema renderiza gráficos e métricas com as informações solicitadas.
@@ -237,7 +237,7 @@ Como observado no diagrama de casos de uso da Figura 1, a secretária poderá ge
 **Ator Secundário:** Não possui.  
 **Pré-condições:** Gestor autenticado.
 
-### Fluxo Principal
+#### Fluxo Principal
 1. O Gestor requisita a área de relatórios.
 2. O Sistema apresenta os tipos de relatórios disponíveis (Alunos, Aulas, Instrutores).
 3. O Gestor seleciona o tipo e aplica filtros (ex.: intervalo de datas).
@@ -254,7 +254,7 @@ Como observado no diagrama de casos de uso da Figura 1, a secretária poderá ge
 **Ator Secundário:** Não possui.  
 **Pré-condições:** Gestor autenticado.
 
-### Fluxo Principal
+#### Fluxo Principal
 1. O Gestor acessa o painel de configurações.
 2. O Sistema exibe as variáveis globais que podem ser alteradas.
 3. O Gestor modifica os dados e solicita a gravação.
@@ -270,7 +270,7 @@ Como observado no diagrama de casos de uso da Figura 1, a secretária poderá ge
 **Ator Secundário:** Recepcionista, Instrutor.  
 **Pré-condições:** Usuário autenticado.
 
-### Fluxo Principal
+#### Fluxo Principal
 1. Qualquer usuário, ao entrar no sistema, visualiza o mural com os avisos ativos.
 2. Apenas o Gestor possui o botão **"Novo Aviso"**.
 3. O Gestor clica em **"Novo Aviso"**, insere o texto e a data de expiração, e guarda.
