@@ -70,56 +70,213 @@ Como observado no diagrama de casos de uso da Figura 1, a secretária poderá ge
 
 #### Figura 1: Diagrama de Casos de Uso do Sistema.
 
-![dcu](https://github.com/user-attachments/assets/41f6b731-b44e-43aa-911f-423ad6198f47)
+<img width="800" height="1120" alt="Diagrama de caso de uso" src="https://github.com/user-attachments/assets/437ab73c-622b-4c64-8b44-e2c23d6684bf" />
+
  
 ### 3.4.2 Descrições de Casos de Uso
 
-Cada caso de uso deve ter a sua descrição representada nesta seção. Exemplo:
+### CSU01 — Entrar no Sistema
 
-#### Gerenciar Professor (CSU01)
+**Sumário:** O funcionário da academia realiza o acesso ao sistema.
 
-Sumário: A Secretária realiza a gestão (inclusão, remoção, alteração e consulta) dos dados sobre professores.
+**Ator Primário:** Gestor, Recepcionista, Instrutor.  
+**Ator Secundário:** Não possui.  
+**Pré-condições:** O usuário deve possuir um cadastro ativo no sistema.
 
-Ator Primário: Secretária.
+### Fluxo Principal
+1. O usuário informa o e-mail/usuário e senha.
+2. O Sistema realiza a validação das credenciais informadas.
+3. Se o usuário informou a senha errada ou usuário inativo, o sistema apresenta mensagem de erro **"Credenciais Inválidas"** e o caso de uso retorna ao passo 1; caso contrário, o caso de uso termina.
 
-Ator Secundário: Coordenador.
+**Pós-condições:** O usuário entra no sistema e é redirecionado para a tela correspondente ao seu perfil.
 
-Pré-condições: A Secretária deve ser validada pelo Sistema.
+### CSU02 — Gerenciar Usuários
 
-Fluxo Principal:
+**Sumário:** O Gestor realiza a gestão (inclusão, alteração, inativação e consulta) dos perfis de acesso dos funcionários.
 
-1) 	A Secretária requisita manutenção de professores.
-2) 	O Sistema apresenta as operações que podem ser realizadas: inclusão de um novo professor, alteração de um professor, a exclusão de um professor e a consulta de dados de um professor.
-3) 	A Secretária seleciona a operação desejada: Inclusão, Exclusão, Alteração ou Consulta, ou opta por finalizar o caso de uso.
-4) 	Se a Secretária desejar continuar com a gestão de professores, o caso de uso retorna ao passo 2; caso contrário o caso de uso termina.
+**Ator Primário:** Gestor.  
+**Ator Secundário:** Não possui.  
+**Pré-condições:** O Gestor deve estar autenticado no sistema.
 
-Fluxo Alternativo (3): Inclusão
+### Fluxo Principal
+1. O Gestor requisita a gestão de usuários.
+2. O Sistema apresenta as operações que podem ser realizadas: inclusão de novo usuário, alteração de dados, inativação de acesso e consulta por nome ou CPF.
+3. O Gestor seleciona a operação desejada: Inclusão, Alteração, Inativação ou Consulta, ou opta por finalizar o caso de uso.
+4. Se o Gestor desejar continuar com a gestão, o caso de uso retorna ao passo 2; caso contrário, o caso de uso termina.
 
-a)	A Secretária requisita a inclusão de um professor. <br>
-b)	O Sistema apresenta uma janela solicitando o CPF do professor a ser cadastrado. <br>
-c)	A Secretária fornece o dado solicitado. <br>
-d)	O Sistema verifica se o professor já está cadastrado. Se sim, o Sistema reporta o fato e volta ao início; caso contrário, apresenta um formulário em branco para que os detalhes do professor (Código, Nome, Endereço, CEP, Estado, Cidade, Bairro, Telefone, Identidade, Sexo, Fax, CPF, Data do Cadastro e Observação) sejam incluídos. <br>
-e)	A Secretária fornece os detalhes do novo professor. <br>
-f)	O Sistema verifica a validade dos dados. Se os dados forem válidos, inclui o novo professor e a grade listando os professores cadastrados é atualizada; caso contrário, o Sistema reporta o fato, solicita novos dados e repete a verificação. <br>
+### Fluxo Alternativo — Inclusão
+- a) O Gestor requisita a inclusão de um usuário.
+- b) O Sistema apresenta uma janela solicitando Nome, CPF, E-mail, Senha Provisória e Nível de Acesso (Gestor, Recepcionista ou Instrutor).
+- c) O Gestor preenche os dados e aciona o salvamento.
+- d) O Sistema verifica se o CPF/E-mail já existem; se sim, exibe erro; se não, a grade listando os usuários é atualizada.
 
-Fluxo Alternativo (3): Remoção
+### Fluxo Alternativo — Alteração
+- a) O Gestor seleciona um usuário para edição, altera os dados permitidos e requisita a atualização.
+- b) O Sistema verifica a validade e altera os dados no cadastro.
 
-a)	A Secretária seleciona um professor e requisita ao Sistema que o remova. <br>
-b)	Se o professor pode ser removido, o Sistema realiza a remoção; caso contrário, o Sistema reporta o fato. <br>
+### Fluxo Alternativo — Inativação
+- a) O Gestor seleciona um usuário e requisita a inativação do seu acesso.
+- b) O Sistema altera o status do usuário para inativo, bloqueando futuros logins.
 
-Fluxo Alternativo (3): Alteração
+### Fluxo Alternativo — Consulta
+- a) O Gestor opta por pesquisar informando o Nome ou CPF na barra de busca.
+- b) O Sistema apresenta a lista filtrada de usuários correspondentes.
 
-a)	A Secretária altera um ou mais dos detalhes do professor e requisita sua atualização. <br>
-b)	O Sistema verifica a validade dos dados e, se eles forem válidos, altera os dados na lista de professores, caso contrário, o erro é reportado. <br>
- 
-Fluxo Alternativo (3): Consulta
+**Pós-condições:** Um usuário foi incluído, alterado, inativado ou consultado no banco de dados.
 
-a)	A Secretária opta por pesquisar pelo nome ou código e solicita a consulta sobre a lista de professores. <br>
-b)	O Sistema apresenta uma lista professores. <br>
-c)	A Secretária seleciona o professor. <br>
-d)	O Sistema apresenta os detalhes do professor no formulário de professores. <br>
+### CSU03 — Gerenciar Alunos
 
-Pós-condições: Um professor foi inserido ou removido, seus dados foram alterados ou apresentados na tela.
+**Sumário:** A Recepcionista realiza a gestão (inclusão, alteração, inativação, consulta) dos dados dos clientes e o registro manual de presença (check-in).
+
+**Ator Primário:** Recepcionista.  
+**Ator Secundário:** Não possui.  
+**Pré-condições:** A Recepcionista deve estar autenticada no sistema.
+
+### Fluxo Principal
+1. A Recepcionista requisita a gestão de alunos.
+2. O Sistema apresenta as operações que podem ser realizadas: inclusão, alteração, inativação, consulta e registro de presença.
+3. A Recepcionista seleciona a operação desejada ou opta por finalizar o caso de uso.
+4. Se a Recepcionista desejar continuar, o caso de uso retorna ao passo 2; caso contrário, termina.
+
+### Fluxo Alternativo — Inclusão
+- a) A Recepcionista requisita a inclusão preenchendo os dados pessoais e de contato do aluno.
+- b) O Sistema valida os dados e guarda o novo registro.
+
+### Fluxo Alternativo — Alteração / Inativação / Consulta
+- a) Segue a mesma lógica do CSU02: pesquisa-se o aluno e edita-se ou inativa-se o seu cadastro.
+
+### Fluxo Alternativo — Registro de Presença (Check-in)
+- a) A Recepcionista localiza o aluno e clica em **"Registrar Presença"**.
+- b) O Sistema verifica se o aluno está com o cadastro ativo. Se sim, exibe um alerta e impede o registro. Se não, vincula a presença à data e hora atuais e exibe uma confirmação de sucesso.
+
+**Pós-condições:** O cadastro de um aluno foi modificado ou a sua presença foi registrada manualmente no sistema.
+
+### CSU04 — Gerenciar Instrutores
+
+**Sumário:** O Gestor realiza a manutenção dos dados dos profissionais de educação física.
+
+**Ator Primário:** Gestor.  
+**Ator Secundário:** Não possui.  
+**Pré-condições:** O Gestor deve estar autenticado no sistema.
+
+### Fluxo Principal
+1. O Gestor requisita a gestão de instrutores.
+2. O Sistema apresenta as operações: inclusão, alteração, inativação e consulta.
+3. O Gestor seleciona a operação desejada ou finaliza.
+4. Se desejar continuar, retorna ao passo 2; caso contrário, termina.
+
+**Pós-condições:** Os dados de um instrutor foram atualizados no sistema.
+
+### CSU05 — Gerenciar Modalidades
+
+**Sumário:** O Gestor registra e categoriza as atividades oferecidas pela academia (ex.: Spinning, Pilates).
+
+**Ator Primário:** Gestor.  
+**Ator Secundário:** Não possui.  
+**Pré-condições:** O Gestor deve estar autenticado.
+
+### Fluxo Principal
+1. O Gestor acessa o módulo de modalidades.
+2. O Sistema apresenta as opções de criar nova modalidade, editar nome/descrição, ou inativar uma modalidade existente.
+3. O Gestor executa a ação e o Sistema valida se o nome da modalidade já existe antes de salvar.
+
+**Pós-condições:** O catálogo de modalidades da academia é atualizado.
+
+### CSU06 — Gerenciar Aulas
+
+**Sumário:** O Gestor ou a Recepcionista criam instâncias de aulas, vinculando-as a instrutores e modalidades. O Instrutor pode apenas consultar.
+
+**Ator Primário:** Gestor, Recepcionista.  
+**Ator Secundário:** Instrutor.  
+**Pré-condições:** O usuário deve estar autenticado no sistema.
+
+### Fluxo Principal
+1. O Usuário requisita a gestão de aulas.
+2. Se o Usuário for **Instrutor**, o Sistema apresenta apenas a operação de consulta da sua própria agenda.
+3. Se o Usuário for **Gestor** ou **Recepcionista**, o Sistema apresenta as operações de Inclusão (definindo horário, local, instrutor e modalidade), Alteração, Cancelamento (Exclusão) e Consulta.
+4. O usuário seleciona a operação. O Sistema valida conflitos de horário (ex.: o mesmo instrutor não pode estar em duas aulas ao mesmo tempo) e guarda a informação.
+
+**Pós-condições:** A grade de aulas do estabelecimento é atualizada ou consultada.
+
+### CSU07 — Gerenciar Turmas
+
+**Sumário:** A administração cria turmas para separar os alunos por níveis de proficiência.
+
+**Ator Primário:** Gestor, Recepcionista.  
+**Ator Secundário:** Não possui.  
+**Pré-condições:** Usuário autenticado.
+
+### Fluxo Principal
+1. O Usuário requisita a gestão de turmas.
+2. O Sistema permite incluir uma nova turma, associando-a a uma modalidade existente e definindo o seu nível (ex.: Iniciante, Avançado).
+3. O usuário também pode alocar alunos específicos a esta turma.
+4. O Sistema guarda as alterações e atualiza a capacidade da turma.
+
+**Pós-condições:** A estruturação das turmas da academia é definida e atualizada no banco de dados.
+
+### CSU08 — Consultar Indicadores
+
+**Sumário:** O Gestor acessa o painel visual (dashboard) para analisar o fluxo da academia.
+
+**Ator Primário:** Gestor.  
+**Ator Secundário:** Não possui.  
+**Pré-condições:** Gestor autenticado no sistema.
+
+### Fluxo Principal
+1. O Gestor seleciona a tela de Dashboard.
+2. O Sistema compila os dados do dia (total de check-ins, aulas ativas, alunos matriculados).
+3. O Sistema renderiza gráficos e métricas com as informações solicitadas.
+
+**Pós-condições:** O Gestor obteve uma visão macro das operações do dia.
+
+### CSU09 — Emitir Relatórios
+
+**Sumário:** O Gestor gera documentos estruturados com dados operacionais.
+
+**Ator Primário:** Gestor.  
+**Ator Secundário:** Não possui.  
+**Pré-condições:** Gestor autenticado.
+
+### Fluxo Principal
+1. O Gestor requisita a área de relatórios.
+2. O Sistema apresenta os tipos de relatórios disponíveis (Alunos, Aulas, Instrutores).
+3. O Gestor seleciona o tipo e aplica filtros (ex.: intervalo de datas).
+4. O Gestor clica em **"Gerar"**.
+5. O Sistema processa as informações e disponibiliza a exportação do arquivo (PDF ou Excel).
+
+**Pós-condições:** Um relatório gerencial é extraído do sistema.
+
+### CSU10 — Gerenciar Configurações
+
+**Sumário:** O Gestor ajusta parâmetros globais da plataforma.
+
+**Ator Primário:** Gestor.  
+**Ator Secundário:** Não possui.  
+**Pré-condições:** Gestor autenticado.
+
+### Fluxo Principal
+1. O Gestor acessa o painel de configurações.
+2. O Sistema exibe as variáveis globais que podem ser alteradas.
+3. O Gestor modifica os dados e solicita a gravação.
+4. O Sistema aplica as configurações a toda a plataforma.
+
+**Pós-condições:** Os parâmetros globais de funcionamento foram atualizados.
+
+### CSU11 — Gerenciar Conteúdo Informacional
+
+**Sumário:** Permite ao Gestor cadastrar comunicados internos que serão exibidos na tela inicial de todos os funcionários da academia.
+
+**Ator Primário:** Gestor.  
+**Ator Secundário:** Recepcionista, Instrutor.  
+**Pré-condições:** Usuário autenticado.
+
+### Fluxo Principal
+1. Qualquer usuário, ao entrar no sistema, visualiza o mural com os avisos ativos.
+2. Apenas o Gestor possui o botão **"Novo Aviso"**.
+3. O Gestor clica em **"Novo Aviso"**, insere o texto e a data de expiração, e guarda.
+4. O Sistema atualiza o Mural para todos os usuários.
+
+**Pós-condições:** A comunicação interna da academia é atualizada na página inicial.
 
 ### 3.4.3 Diagrama de Classes 
 
