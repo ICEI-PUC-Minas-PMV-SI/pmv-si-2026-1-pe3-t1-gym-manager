@@ -31,3 +31,636 @@
       display: flex;
       overflow: hidden;
     }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 0 16px;
+      gap: 4px;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .sb-icon {
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--muted);
+      transition: background 0.15s, color 0.15s;
+      border: none;
+      background: none;
+    }
+    .sb-icon:hover { background: var(--bg); color: var(--text); }
+    .sb-icon.active { background: #EEEDFE; color: var(--accent); }
+    .sb-icon svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+    .sb-spacer { flex: 1; }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      height: var(--topbar-h);
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+      flex-shrink: 0;
+    }
+
+    /* ── CONTENT ── */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px 24px;
+    }
+
+    .page-title {
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 20px;
+      letter-spacing: -0.3px;
+    }
+
+    /* ── TOOLBAR ── */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      max-width: 320px;
+    }
+    .search-wrap svg {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 15px;
+      height: 15px;
+      stroke: var(--muted);
+      fill: none;
+      stroke-width: 2;
+    }
+    .search-wrap input {
+      width: 100%;
+      height: 36px;
+      padding: 0 12px 0 34px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      font-family: inherit;
+      font-size: 13px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .search-wrap input:focus { border-color: var(--accent); }
+    .search-wrap input::placeholder { color: var(--muted); }
+
+    .filter-select {
+      height: 36px;
+      padding: 0 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      font-family: inherit;
+      font-size: 13px;
+      color: var(--text);
+      cursor: pointer;
+      outline: none;
+    }
+
+    .btn-add {
+      height: 36px;
+      padding: 0 16px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: auto;
+      transition: opacity 0.15s;
+    }
+    .btn-add:hover { opacity: 0.88; }
+    .btn-add svg { width: 14px; height: 14px; stroke: #fff; fill: none; stroke-width: 2.5; }
+
+    /* ── TABLE ── */
+    .table-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    thead { background: #FAFAF8; }
+
+    th {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 11px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      font-size: 13.5px;
+      color: var(--text);
+      padding: 11px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr { transition: background 0.1s; }
+    tbody tr:hover { background: #FAFAF8; }
+
+    /* column widths */
+    th:nth-child(1), td:nth-child(1) { width: 26%; }
+    th:nth-child(2), td:nth-child(2) { width: 18%; }
+    th:nth-child(3), td:nth-child(3) { width: 14%; }
+    th:nth-child(4), td:nth-child(4) { width: 14%; }
+    th:nth-child(5), td:nth-child(5) { width: 10%; text-align: center; }
+    th:nth-child(6), td:nth-child(6) { width: 18%; text-align: right; }
+
+    /* ── BADGES ── */
+    .badge {
+      display: inline-block;
+      padding: 3px 11px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .badge-ativo    { background: var(--ativo-bg);   color: var(--ativo-tx); }
+    .badge-inativo  { background: var(--inativo-bg); color: var(--inativo-tx); }
+
+    /* ── ACTION BUTTONS ── */
+    .actions { display: flex; align-items: center; justify-content: flex-end; gap: 4px; }
+
+    .btn-action {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      border-radius: 6px;
+      background: none;
+      cursor: pointer;
+      color: var(--muted);
+      transition: background 0.12s, color 0.12s;
+    }
+    .btn-action:hover { background: var(--bg); color: var(--text); }
+    .btn-action.danger:hover { background: #FCEBEB; color: #A32D2D; }
+    .btn-action svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── FCM DOT ── */
+    .fcm-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .fcm-dot.sim { background: #639922; }
+    .fcm-dot.nao { background: #E24B4A; }
+
+    /* ── EMPTY STATE ── */
+    .empty-row td {
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      padding: 40px;
+    }
+
+    /* ── FOOTER DA TABELA ── */
+    .table-footer {
+      padding: 10px 16px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(26,25,24,0.35);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--surface);
+      border-radius: 14px;
+      width: 400px;
+      padding: 24px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      animation: modalIn 0.18s ease;
+    }
+    @keyframes modalIn { from { opacity:0; transform: scale(0.96) translateY(6px); } to { opacity:1; transform: none; } }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .modal-header h2 { font-size: 17px; font-weight: 600; }
+    .modal-close {
+      width: 30px; height: 30px;
+      border: none; background: none; cursor: pointer;
+      border-radius: 6px; color: var(--muted);
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.12s;
+    }
+    .modal-close:hover { background: var(--bg); }
+    .modal-close svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 500; color: var(--muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      height: 38px;
+      padding: 0 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13.5px;
+      color: var(--text);
+      background: var(--surface);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .form-group input:focus,
+    .form-group select:focus { border-color: var(--accent); }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .modal-actions { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
+
+    .btn-cancel {
+      height: 36px; padding: 0 16px;
+      background: none; border: 1px solid var(--border);
+      border-radius: 8px; font-family: inherit; font-size: 13px;
+      cursor: pointer; color: var(--muted);
+      transition: background 0.12s;
+    }
+    .btn-cancel:hover { background: var(--bg); }
+
+    .btn-save {
+      height: 36px; padding: 0 20px;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 8px;
+      font-family: inherit; font-size: 13px; font-weight: 500;
+      cursor: pointer; transition: opacity 0.15s;
+    }
+    .btn-save:hover { opacity: 0.88; }
+
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<nav class="sidebar" aria-label="Menu principal">
+  <button class="sb-icon" title="Expandir menu">
+    <svg viewBox="0 0 24 24"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
+  </button>
+
+  <button class="sb-icon active" title="Início">
+    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+  </button>
+
+  <button class="sb-icon" title="Relatórios">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+  </button>
+
+  <button class="sb-icon" title="Configurações">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 005 5a10 10 0 000 14 10 10 0 0014.07-14.07"/></svg>
+  </button>
+
+  <div class="sb-spacer"></div>
+
+  <button class="sb-icon" title="Sair">
+    <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+  </button>
+</nav>
+
+<!-- ══ MAIN ══ -->
+<main class="main">
+  <div class="topbar">Dash_Alunos</div>
+
+  <div class="content">
+    <h1 class="page-title">Gerenciamento de Alunos</h1>
+
+    <!-- toolbar -->
+    <div class="toolbar">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="searchInput" placeholder="Buscar aluno..." />
+      </div>
+
+      <select class="filter-select" id="filterStatus">
+        <option value="">Todos os status</option>
+        <option value="Ativo">Ativo</option>
+        <option value="Inativo">Inativo</option>
+      </select>
+
+      <button class="btn-add" onclick="abrirModal()">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Novo Aluno
+      </button>
+    </div>
+
+    <!-- tabela -->
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Aluno</th>
+            <th>Telefone</th>
+            <th>Plano</th>
+            <th>Status</th>
+            <th>FCM</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaBody"></tbody>
+      </table>
+      <div class="table-footer">
+        <span id="contador">0 alunos</span>
+        <span>Atualizado agora</span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ══ MODAL ══ -->
+<div class="modal-overlay" id="modalOverlay" onclick="fecharModalFora(event)">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
+    <div class="modal-header">
+      <h2 id="modalTitulo">Novo Aluno</h2>
+      <button class="modal-close" onclick="fecharModal()" title="Fechar">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="form-group">
+      <label for="inputNome">Nome completo</label>
+      <input type="text" id="inputNome" placeholder="Ex: Ana Paula Silva" />
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="inputTel">Telefone</label>
+        <input type="text" id="inputTel" placeholder="(00) 00000-0000" />
+      </div>
+      <div class="form-group">
+        <label for="inputPlano">Plano</label>
+        <select id="inputPlano">
+          <option value="Mensal">Mensal</option>
+          <option value="Trimestral">Trimestral</option>
+          <option value="Semestral">Semestral</option>
+          <option value="Anual">Anual</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="inputStatus">Status</label>
+        <select id="inputStatus">
+          <option value="Ativo">Ativo</option>
+          <option value="Inativo">Inativo</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="inputFcm">FCM</label>
+        <select id="inputFcm">
+          <option value="Sim">Sim</option>
+          <option value="Não">Não</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+      <button class="btn-save" onclick="salvarAluno()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ JAVASCRIPT ══ -->
+<script>
+  // ── Dados iniciais ──
+  let alunos = [
+    { id: 1, nome: "Ana Paula Silva",   tel: "(31) 99801-2345", plano: "Mensal",     status: "Ativo",   fcm: "Sim" },
+    { id: 2, nome: "Carlos Mendes",     tel: "(31) 98732-9876", plano: "Trimestral", status: "Inativo", fcm: "Não" },
+    { id: 3, nome: "Fernanda Costa",    tel: "(31) 99112-4567", plano: "Anual",      status: "Ativo",   fcm: "Sim" },
+    { id: 4, nome: "João Oliveira",     tel: "(31) 97654-3210", plano: "Mensal",     status: "Ativo",   fcm: "Sim" },
+    { id: 5, nome: "Mariana Rocha",     tel: "(31) 99023-8765", plano: "Semestral",  status: "Inativo", fcm: "Não" },
+    { id: 6, nome: "Pedro Alves",       tel: "(31) 98456-6543", plano: "Mensal",     status: "Ativo",   fcm: "Sim" },
+    { id: 7, nome: "Sofia Teixeira",    tel: "(31) 99345-1234", plano: "Anual",      status: "Ativo",   fcm: "Sim" },
+    { id: 8, nome: "Rafael Lima",       tel: "(31) 98901-5678", plano: "Trimestral", status: "Inativo", fcm: "Não" },
+    { id: 9, nome: "Camila Nunes",      tel: "(31) 99678-3456", plano: "Mensal",     status: "Ativo",   fcm: "Sim" },
+    { id:10, nome: "Lucas Ferreira",    tel: "(31) 97890-2345", plano: "Semestral",  status: "Ativo",   fcm: "Sim" },
+  ];
+
+  let proximoId = 11;
+  let modoEdicao = false;
+  let idEditando = null;
+
+  // ── Renderiza a tabela ──
+  function renderizar() {
+    const busca  = document.getElementById("searchInput").value.toLowerCase();
+    const filtro = document.getElementById("filterStatus").value;
+
+    const filtrados = alunos.filter(a => {
+      const buscaOk  = a.nome.toLowerCase().includes(busca) || a.tel.includes(busca);
+      const statusOk = filtro === "" || a.status === filtro;
+      return buscaOk && statusOk;
+    });
+
+    const tbody = document.getElementById("tabelaBody");
+    tbody.innerHTML = "";
+
+    if (filtrados.length === 0) {
+      tbody.innerHTML = `<tr class="empty-row"><td colspan="6">Nenhum aluno encontrado.</td></tr>`;
+    } else {
+      filtrados.forEach(a => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td title="${a.nome}">${a.nome}</td>
+          <td>${a.tel}</td>
+          <td>${a.plano}</td>
+          <td>
+            <span class="badge ${a.status === 'Ativo' ? 'badge-ativo' : 'badge-inativo'}">
+              ${a.status}
+            </span>
+          </td>
+          <td>
+            <span class="fcm-dot ${a.fcm === 'Sim' ? 'sim' : 'nao'}" title="${a.fcm}"></span>
+          </td>
+          <td>
+            <div class="actions">
+              <button class="btn-action" title="Editar" onclick="editarAluno(${a.id})">
+                <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </button>
+              <button class="btn-action danger" title="Excluir" onclick="excluirAluno(${a.id})">
+                <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+              </button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // contador
+    const total = filtrados.length;
+    document.getElementById("contador").textContent =
+      total === 1 ? "1 aluno" : `${total} alunos`;
+  }
+
+  // ── Modal: abrir para novo ──
+  function abrirModal() {
+    modoEdicao = false;
+    idEditando = null;
+    document.getElementById("modalTitulo").textContent = "Novo Aluno";
+    document.getElementById("inputNome").value  = "";
+    document.getElementById("inputTel").value   = "";
+    document.getElementById("inputPlano").value = "Mensal";
+    document.getElementById("inputStatus").value = "Ativo";
+    document.getElementById("inputFcm").value   = "Sim";
+    document.getElementById("modalOverlay").classList.add("open");
+    document.getElementById("inputNome").focus();
+  }
+
+  // ── Modal: abrir para editar ──
+  function editarAluno(id) {
+    const a = alunos.find(x => x.id === id);
+    if (!a) return;
+    modoEdicao = true;
+    idEditando = id;
+    document.getElementById("modalTitulo").textContent = "Editar Aluno";
+    document.getElementById("inputNome").value   = a.nome;
+    document.getElementById("inputTel").value    = a.tel;
+    document.getElementById("inputPlano").value  = a.plano;
+    document.getElementById("inputStatus").value = a.status;
+    document.getElementById("inputFcm").value    = a.fcm;
+    document.getElementById("modalOverlay").classList.add("open");
+    document.getElementById("inputNome").focus();
+  }
+
+  // ── Modal: fechar ──
+  function fecharModal() {
+    document.getElementById("modalOverlay").classList.remove("open");
+  }
+
+  function fecharModalFora(e) {
+    if (e.target === document.getElementById("modalOverlay")) fecharModal();
+  }
+
+  // ── Salvar (novo ou edição) ──
+  function salvarAluno() {
+    const nome   = document.getElementById("inputNome").value.trim();
+    const tel    = document.getElementById("inputTel").value.trim();
+    const plano  = document.getElementById("inputPlano").value;
+    const status = document.getElementById("inputStatus").value;
+    const fcm    = document.getElementById("inputFcm").value;
+
+    if (!nome) {
+      alert("Por favor, informe o nome do aluno.");
+      document.getElementById("inputNome").focus();
+      return;
+    }
+
+    if (modoEdicao) {
+      const idx = alunos.findIndex(x => x.id === idEditando);
+      if (idx !== -1) {
+        alunos[idx] = { id: idEditando, nome, tel, plano, status, fcm };
+      }
+    } else {
+      alunos.push({ id: proximoId++, nome, tel, plano, status, fcm });
+    }
+
+    fecharModal();
+    renderizar();
+  }
+
+  // ── Excluir ──
+  function excluirAluno(id) {
+    const a = alunos.find(x => x.id === id);
+    if (!a) return;
+    if (confirm(`Excluir o aluno "${a.nome}"?`)) {
+      alunos = alunos.filter(x => x.id !== id);
+      renderizar();
+    }
+  }
+
+  // ── Eventos de busca e filtro ──
+  document.getElementById("searchInput").addEventListener("input", renderizar);
+  document.getElementById("filterStatus").addEventListener("change", renderizar);
+
+  // ── Fechar modal com ESC ──
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") fecharModal();
+  });
+
+  // ── Render inicial ──
+  renderizar();
+</script>
+</body>
+</html>
