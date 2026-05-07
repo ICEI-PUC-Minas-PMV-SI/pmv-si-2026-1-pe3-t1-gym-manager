@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dash_Histórico e Relatórios</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #F4F3EF;
+      --surface:   #FFFFFF;
+      --border:    #E2E0D8;
+      --text:      #1A1918;
+      --muted:     #7A786F;
+      --accent:    #3B3A96;
+      --ativo-bg:  #CECBF6;
+      --ativo-tx:  #3C3489;
+      --inativo-bg:#F5C4B3;
+      --inativo-tx:#712B13;
+      --sidebar-w: 56px;
+      --topbar-h:  38px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 0 16px;
+      gap: 4px;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .sb-icon {
+      width: 38px; height: 38px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--muted);
+      transition: background 0.15s, color 0.15s;
+      border: none; background: none;
+    }
+    .sb-icon:hover  { background: var(--bg); color: var(--text); }
+    .sb-icon.active { background: #EEEDFE;   color: var(--accent); }
+    .sb-icon svg    { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .sb-spacer { flex: 1; }
+
+    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+    .topbar {
+      height: var(--topbar-h);
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+      padding: 0 20px;
+      font-size: 11px; color: var(--muted);
+      letter-spacing: 0.02em;
+      flex-shrink: 0;
+    }
+
+    .content { flex: 1; overflow-y: auto; padding: 28px 24px; }
+
+    /* ══ CABEÇALHO DA PÁGINA ══ */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .page-title {
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+
+    /* botao do lado direito do titlo */
+    .header-actions { display: flex; align-items: center; gap: 8px; }
+
+    .btn-outline {
+      height: 36px; padding: 0 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      font-family: inherit; font-size: 13px; font-weight: 500;
+      color: var(--accent);
+      cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .btn-outline:hover { border-color: var(--accent); background: #F5F4FE; }
+    .btn-outline svg   { width: 14px; height: 14px; stroke: var(--accent); fill: none; stroke-width: 1.8; }
+
+    .btn-export {
+      height: 36px; padding: 0 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      font-family: inherit; font-size: 13px; font-weight: 500;
+      color: var(--text);
+      cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      transition: border-color 0.15s;
+      position: relative;
+    }
+    .btn-export:hover { border-color: var(--accent); }
+    .btn-export svg   { width: 13px; height: 13px; stroke: var(--muted); fill: none; stroke-width: 2; }
+
+    /* dropdown de exportar */
+    .export-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.09);
+      min-width: 150px;
+      z-index: 100;
+      overflow: hidden;
+    }
+    .export-menu.open { display: block; }
+    .export-menu button {
+      width: 100%; padding: 10px 14px;
+      text-align: left;
+      background: none; border: none;
+      font-family: inherit; font-size: 13px;
+      color: var(--text); cursor: pointer;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .export-menu button:hover { background: var(--bg); }
+    .export-menu button svg   { width: 14px; height: 14px; stroke: var(--muted); fill: none; stroke-width: 1.8; }
+
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .filter-label { font-size: 12px; color: var(--muted); margin-right: 4px; }
+
+    .pill {
+      height: 32px; padding: 0 14px;
+      border-radius: 20px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      font-family: inherit; font-size: 12.5px; font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .pill:hover   { border-color: var(--accent); color: var(--accent); }
+    .pill.active  { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    .search-wrap {
+      position: relative;
+      flex: 1; max-width: 300px;
+      margin-left: auto;
+    }
+    .search-wrap svg {
+      position: absolute; left: 10px; top: 50%;
+      transform: translateY(-50%);
+      width: 14px; height: 14px;
+      stroke: var(--muted); fill: none; stroke-width: 2;
+    }
+    .search-wrap input {
+      width: 100%; height: 32px;
+      padding: 0 12px 0 32px;
+      border: 1px solid var(--border); border-radius: 20px;
+      background: var(--surface);
+      font-family: inherit; font-size: 13px; color: var(--text);
+      outline: none; transition: border-color 0.15s;
+    }
+    .search-wrap input:focus      { border-color: var(--accent); }
+    .search-wrap input::placeholder { color: var(--muted); }
+
+    .table-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    thead { background: #FAFAF8; }
+
+    th {
+      font-size: 12px; font-weight: 500; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.06em;
+      padding: 11px 16px; text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      font-size: 13.5px; color: var(--text);
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr { transition: background 0.1s; }
+    tbody tr:hover { background: #FAFAF8; }
+
+    /* largura das colunas */
+    th:nth-child(1), td:nth-child(1) { width: 28%; }
+    th:nth-child(2), td:nth-child(2) { width: 20%; }
+    th:nth-child(3), td:nth-child(3) { width: 20%; }
+    th:nth-child(4), td:nth-child(4) { width: 14%; }
+    th:nth-child(5), td:nth-child(5) { width: 18%; text-align: right; }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 11px; border-radius: 20px;
+      font-size: 12px; font-weight: 500;
+    }
+    .badge-ativo   { background: var(--ativo-bg);   color: var(--ativo-tx); }
+    .badge-inativo { background: var(--inativo-bg); color: var(--inativo-tx); }
+
+    .actions { display: flex; align-items: center; justify-content: flex-end; gap: 4px; }
+
+    .btn-action {
+      width: 30px; height: 30px;
+      display: flex; align-items: center; justify-content: center;
+      border: none; border-radius: 6px;
+      background: none; cursor: pointer;
+      color: var(--muted);
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn-action:hover        { background: var(--bg); color: var(--text); }
+    .btn-action.danger:hover { background: #FDECEA;   color: #C0392B; }
+    .btn-action svg          { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+    .table-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 16px;
+      border-top: 1px solid var(--border);
+      font-size: 12px; color: var(--muted);
+    }
+
+    /* LINHA VAZIA */
+    .empty-row td {
+      text-align: center; color: var(--muted);
+      padding: 32px 0; font-size: 13px;
+    }
+
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.35);
+      z-index: 200; align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--surface); border-radius: 14px;
+      padding: 24px; width: 420px; max-width: 94vw;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+    }
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .modal-header h2 { font-size: 17px; font-weight: 600; }
+    .modal-close {
+      width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      border: none; background: none; cursor: pointer;
+      border-radius: 6px; color: var(--muted);
+      transition: background 0.15s;
+    }
+    .modal-close:hover { background: var(--bg); }
+    .modal-close svg   { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    .form-group        { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
+    .form-group label  { font-size: 12px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .form-group input, .form-group select {
+      height: 38px; padding: 0 12px;
+      border: 1px solid var(--border); border-radius: 8px;
+      font-family: inherit; font-size: 13px; color: var(--text);
+      background: var(--surface); outline: none;
+      transition: border-color 0.15s;
+    }
+    .form-group input:focus, .form-group select:focus { border-color: var(--accent); }
+    .form-group input::placeholder { color: var(--muted); }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+    .btn-cancel {
+      height: 36px; padding: 0 16px;
+      border: 1px solid var(--border); border-radius: 8px;
+      background: none; font-family: inherit; font-size: 13px;
+      color: var(--muted); cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .btn-cancel:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-save {
+      height: 36px; padding: 0 20px;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 8px;
+      font-family: inherit; font-size: 13px; font-weight: 500;
+      cursor: pointer; transition: opacity 0.15s;
+    }
+    .btn-save:hover { opacity: 0.88; }
+
+    .toast {
+      position: fixed; bottom: 24px; right: 24px;
+      background: #222; color: #fff;
+      padding: 10px 18px; border-radius: 10px;
+      font-size: 13px;
+      opacity: 0; transform: translateY(8px);
+      transition: opacity 0.25s, transform 0.25s;
+      z-index: 300; pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <!-- chevrons -->
+  <button class="sb-icon" title="Menu">
+    <svg viewBox="0 0 24 24"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
+  </button>
+
+  <!-- home -->
+  <a href="#" class="sb-icon" title="Dashboard">
+    <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg>
+  </a>
+
+  <!-- relatorios — ATIVO nessa pag -->
+  <button class="sb-icon active" title="Histórico e Relatórios">
+    <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+  </button>
+
+  <!-- configuraçao -->
+  <button class="sb-icon" title="Configurações">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+  </button>
+
+  <div class="sb-spacer"></div>
+
+  <!-- sair -->
+  <button class="sb-icon" title="Sair">
+    <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+  </button>
+</aside>
+
+<!-- PRINCIPAL -->
+<main class="main">
+
+  <div class="content">
+
+    <div class="page-header">
+      <h1 class="page-title">Histórico e Relatórios</h1>
+
+      <div class="header-actions">
+        <!-- botao historico -->
+        <button class="btn-outline" title="Atualizar histórico" onclick="atualizarHistorico()">
+          <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+          Histórico
+        </button>
+
+        <!-- botao exportar -->
+        <div style="position:relative;">
+          <button class="btn-export" onclick="toggleExport(event)">
+            Exportar
+            <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="export-menu" id="exportMenu">
+            <button onclick="exportarCSV()">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Exportar CSV
+            </button>
+            <button onclick="exportarPDF()">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              Exportar PDF
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- filtros pill + busca -->
+    <div class="filter-bar">
+      <button class="pill active" id="pill-todos"    onclick="setFiltro('todos')">Todos alunos</button>
+      <button class="pill"        id="pill-ativos"   onclick="setFiltro('ativos')">Ativos</button>
+      <button class="pill"        id="pill-inativos" onclick="setFiltro('inativos')">Inativos</button>
+
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="searchInput" placeholder="Buscar aluno ou telefone…" oninput="renderizar()" />
+      </div>
+    </div>
+
+    <!-- tabela -->
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Aluno</th>
+            <th>Telefone</th>
+            <th>Último Check-in</th>
+            <th>Status</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaBody"></tbody>
+      </table>
+      <div class="table-footer">
+        <span id="contador">0 registros</span>
+        <span id="ultimaAtualizacao">Atualizado agora</span>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- ver histórico do aluno -->
+<div class="modal-overlay" id="modalOverlay" onclick="fecharModalFora(event)">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
+    <div class="modal-header">
+      <h2 id="modalTitulo">Histórico de Check-ins</h2>
+      <button class="modal-close" onclick="fecharModal()">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div id="modalConteudo" style="font-size:13.5px; color: var(--text); line-height: 1.8;"></div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="fecharModal()">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+
+  // ── dados de exemplo ──
+  const registros = [
+    { id:1,  nome:"Ana Paula Silva",   tel:"(31) 99801-2345", checkin:"03/05/2025 07:14", status:"Ativo",   historico:["03/05/2025 07:14","29/04/2025 07:22","25/04/2025 07:09"] },
+    { id:2,  nome:"Carlos Mendes",     tel:"(31) 98732-9876", checkin:"10/03/2025 18:40", status:"Inativo", historico:["10/03/2025 18:40","05/03/2025 18:55"] },
+    { id:3,  nome:"Fernanda Costa",    tel:"(31) 99112-4567", checkin:"04/05/2025 09:03", status:"Ativo",   historico:["04/05/2025 09:03","02/05/2025 08:58","30/04/2025 09:10"] },
+    { id:4,  nome:"João Oliveira",     tel:"(31) 97654-3210", checkin:"02/05/2025 06:55", status:"Ativo",   historico:["02/05/2025 06:55","28/04/2025 07:01"] },
+    { id:5,  nome:"Mariana Rocha",     tel:"(31) 99023-8765", checkin:"15/02/2025 10:20", status:"Inativo", historico:["15/02/2025 10:20"] },
+    { id:6,  nome:"Pedro Alves",       tel:"(31) 98456-6543", checkin:"05/05/2025 08:30", status:"Ativo",   historico:["05/05/2025 08:30","03/05/2025 08:41","01/05/2025 08:29"] },
+    { id:7,  nome:"Sofia Teixeira",    tel:"(31) 99345-1234", checkin:"04/05/2025 17:10", status:"Ativo",   historico:["04/05/2025 17:10","30/04/2025 17:05"] },
+    { id:8,  nome:"Rafael Lima",       tel:"(31) 98901-5678", checkin:"22/01/2025 19:00", status:"Inativo", historico:["22/01/2025 19:00","18/01/2025 19:14"] },
+    { id:9,  nome:"Camila Nunes",      tel:"(31) 99678-3456", checkin:"05/05/2025 06:45", status:"Ativo",   historico:["05/05/2025 06:45","03/05/2025 06:50","01/05/2025 07:00"] },
+    { id:10, nome:"Lucas Ferreira",    tel:"(31) 97890-2345", checkin:"01/05/2025 11:30", status:"Ativo",   historico:["01/05/2025 11:30","27/04/2025 11:45"] },
+  ];
+
+  let filtroAtivo = "todos"; // "todos" | "ativos" | "inativos"
+
+  // ── muda o filtro por pill ──
+  function setFiltro(valor) {
+    filtroAtivo = valor;
+    document.querySelectorAll(".pill").forEach(p => p.classList.remove("active"));
+    document.getElementById("pill-" + valor).classList.add("active");
+    renderizar();
+  }
+
+  // ── renderiza a tabela ──
+  function renderizar() {
+    const busca = document.getElementById("searchInput").value.toLowerCase();
+
+    const filtrados = registros.filter(r => {
+      const buscaOk  = r.nome.toLowerCase().includes(busca) || r.tel.includes(busca);
+      const statusOk = filtroAtivo === "todos"    ? true
+                     : filtroAtivo === "ativos"   ? r.status === "Ativo"
+                     :                              r.status === "Inativo";
+      return buscaOk && statusOk;
+    });
+
+    const tbody = document.getElementById("tabelaBody");
+    tbody.innerHTML = "";
+
+    if (filtrados.length === 0) {
+      tbody.innerHTML = `<tr class="empty-row"><td colspan="5">Nenhum registro encontrado.</td></tr>`;
+    } else {
+      filtrados.forEach(r => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td title="${r.nome}">${r.nome}</td>
+          <td>${r.tel}</td>
+          <td>${r.checkin}</td>
+          <td>
+            <span class="badge ${r.status === 'Ativo' ? 'badge-ativo' : 'badge-inativo'}">
+              ${r.status}
+            </span>
+          </td>
+          <td>
+            <div class="actions">
+              <button class="btn-action" title="Ver histórico" onclick="verHistorico(${r.id})">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </button>
+              <button class="btn-action danger" title="Remover registro" onclick="removerRegistro(${r.id})">
+                <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+              </button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    const total = filtrados.length;
+    document.getElementById("contador").textContent =
+      total === 1 ? "1 registro" : `${total} registros`;
+  }
+
+  // ── ver historico completo do aluno ──
+  function verHistorico(id) {
+    const r = registros.find(x => x.id === id);
+    if (!r) return;
+    document.getElementById("modalTitulo").textContent = `Histórico — ${r.nome}`;
+    const lista = r.historico.map(d => `<div style="padding:4px 0; border-bottom:1px solid var(--border);">📅 ${d}</div>`).join("");
+    document.getElementById("modalConteudo").innerHTML =
+      `<p style="margin-bottom:12px; color:var(--muted); font-size:12px;">${r.historico.length} check-in(s) registrado(s)</p>` + lista;
+    document.getElementById("modalOverlay").classList.add("open");
+  }
+
+  function removerRegistro(id) {
+    const r = registros.find(x => x.id === id);
+    if (!r) return;
+    if (confirm(`Remover o histórico de "${r.nome}"?`)) {
+      const idx = registros.indexOf(r);
+      registros.splice(idx, 1);
+      renderizar();
+      mostrarToast("Registro removido.");
+    }
+  }
+
+  function fecharModal() { document.getElementById("modalOverlay").classList.remove("open"); }
+  function fecharModalFora(e) { if (e.target === document.getElementById("modalOverlay")) fecharModal(); }
+
+  // ── botao historico (é pa simula atualizaçao) ──
+  function atualizarHistorico() {
+    document.getElementById("ultimaAtualizacao").textContent = "Atualizando…";
+    setTimeout(() => {
+      const agora = new Date();
+      document.getElementById("ultimaAtualizacao").textContent =
+        "Atualizado as " + agora.toLocaleTimeString("pt-BR", { hour:"2-digit", minute:"2-digit" });
+      mostrarToast("historico atualizado.");
+    }, 800);
+  }
+
+  // ── exportar csv ──
+  function exportarCSV() {
+    document.getElementById("exportMenu").classList.remove("open");
+    const linhas = [["Aluno","Telefone","Último Check-in","Status"]];
+    registros.forEach(r => linhas.push([r.nome, r.tel, r.checkin, r.status]));
+    const csv = linhas.map(l => l.join(";")).join("\n");
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement("a");
+    a.href = url; a.download = "historico_alunos.csv"; a.click();
+    URL.revokeObjectURL(url);
+    mostrarToast("CSV exportado com sucesso!");
+  }
+
+  // ── exportar PDF (n sei fazer) ──
+  function exportarPDF() {
+    document.getElementById("exportMenu").classList.remove("open");
+    mostrarToast("Preparando impressão…");
+    setTimeout(() => window.print(), 600);
+  }
+
+  // ── toggle dropdown exportar ──
+  function toggleExport(e) {
+    e.stopPropagation();
+    document.getElementById("exportMenu").classList.toggle("open");
+  }
+  document.addEventListener("click", () => {
+    document.getElementById("exportMenu").classList.remove("open");
+  });
+
+  // ── toast ──
+  function mostrarToast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 2500);
+  }
+
+  // ── ESC fecha modal ──
+  document.addEventListener("keydown", e => { if (e.key === "Escape") fecharModal(); });
+
+  // ── render inicial ──
+  renderizar();
+</script>
+</body>
+</html>
