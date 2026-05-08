@@ -1,0 +1,158 @@
+
+
+/* ── LAYOUT ── */
+.agenda-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 20px;
+}
+
+/* ── CALENDÁRIO ── */
+.cal-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.cal-header {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.cal-title { font-size: 15px; font-weight: 600; }
+
+.cal-nav { display: flex; gap: 4px; }
+.cal-nav button {
+  width: 30px; height: 30px;
+  border: none; background: none; cursor: pointer;
+  border-radius: 6px; color: var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.12s, color 0.12s;
+}
+.cal-nav button:hover { background: var(--bg); color: var(--text); }
+.cal-nav button svg {
+  width: 14px; height: 14px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
+}
+
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 8px 12px 4px;
+}
+.cal-weekday {
+  text-align: center; font-size: 11px; font-weight: 500;
+  color: var(--muted); text-transform: uppercase;
+  letter-spacing: 0.05em; padding: 4px 0;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 0 12px 12px;
+  gap: 2px;
+}
+
+.cal-day {
+  aspect-ratio: 1;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 2px;
+  font-size: 13px; border-radius: 8px; cursor: pointer;
+  position: relative;
+  transition: background 0.12s, color 0.12s;
+}
+.cal-day:hover { background: var(--bg); }
+.cal-day.other-month { color: var(--border); cursor: default; }
+.cal-day.other-month:hover { background: none; }
+.cal-day.today  { font-weight: 600; color: var(--accent); }
+.cal-day.selected { background: var(--accent) !important; color: #fff !important; }
+
+.event-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%; background: var(--accent);
+}
+.cal-day.selected .event-dot { background: rgba(255,255,255,0.7); }
+
+/* ── PAINEL DE EVENTOS ── */
+.events-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+
+.events-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.events-header-title { font-size: 14px; font-weight: 600; }
+.events-date { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+.events-list { flex: 1; overflow-y: auto; padding: 12px; }
+
+.event-item {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 10px 12px; border-radius: 8px;
+  transition: background 0.1s; margin-bottom: 6px;
+}
+.event-item:hover { background: var(--bg); }
+.event-item:last-child { margin-bottom: 0; }
+
+.event-color {
+  width: 4px; border-radius: 4px;
+  flex-shrink: 0; min-height: 40px;
+}
+.event-info { flex: 1; min-width: 0; }
+.event-name {
+  font-size: 13px; font-weight: 500;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.event-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+.event-actions { display: flex; gap: 2px; }
+.event-btn {
+  width: 26px; height: 26px;
+  border: none; background: none; cursor: pointer;
+  border-radius: 5px; color: var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.12s, color 0.12s;
+}
+.event-btn:hover        { background: var(--bg);        color: var(--text); }
+.event-btn.danger:hover { background: var(--danger-bg); color: var(--danger); }
+.event-btn svg {
+  width: 13px; height: 13px;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
+
+.empty-events {
+  text-align: center; padding: 32px 16px;
+  color: var(--muted); font-size: 13px;
+}
+.empty-events svg {
+  width: 32px; height: 32px;
+  stroke: var(--border); fill: none;
+  stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+  display: block; margin: 0 auto 10px;
+}
+
+/* ── CORES DE EVENTO ── */
+.ec-blue   { background: #4A7CF7; }
+.ec-green  { background: #639922; }
+.ec-orange { background: #E07B3A; }
+.ec-purple { background: var(--accent); }
+.ec-red    { background: var(--danger); }
+
+/* ── COLOR PICKER ── */
+.color-options { display: flex; gap: 8px; margin-top: 8px; }
+.color-opt {
+  width: 24px; height: 24px; border-radius: 50%;
+  cursor: pointer; border: 2px solid transparent;
+  transition: border-color 0.12s;
+}
+.color-opt.selected { border-color: var(--text); }
