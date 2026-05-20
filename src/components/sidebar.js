@@ -81,6 +81,10 @@ function gerarHTMLSidebar() {
           </svg>
         </button>
       </div>
+      <div class="sb-user" id="sbUser">
+        <div class="sb-avatar" id="sbUserAvatar">?</div>
+        <button class="sb-username" id="sbUserName" title="Ver perfil">Perfil</button>
+      </div>
       <div class="sb-nav">
         <div class="sb-section">
           <button class="sb-section-header ${dashAtivo}" data-section="sec-dashboard">
@@ -227,6 +231,40 @@ const CSS_SIDEBAR = `
   }
   .sb-toggle:hover { background: var(--sb-bg); color: var(--sb-text); }
   .sb-toggle svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+
+  .sb-user {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--sb-border);
+    flex-shrink: 0;
+    background: var(--sb-surface);
+  }
+  .sb-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #DDDBE8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: var(--sb-accent);
+    font-size: 18px;
+  }
+  .sb-username {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: var(--sb-text);
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .gym-sidebar.fechada .sb-username { opacity: 0; width: 0; height: 0; padding: 0; margin: 0; pointer-events: none; }
 
   .gym-sidebar       .icon-abrir  { display: none; }
   .gym-sidebar       .icon-fechar { display: block; }
@@ -384,6 +422,23 @@ function inicializarInteratividade() {
     }
   }
 
+  // preencher info do usuário (avatar + nome) a partir do localStorage
+  const elAvatar = document.getElementById('sbUserAvatar');
+  const elNome   = document.getElementById('sbUserName');
+  try {
+    const perfil = JSON.parse(localStorage.getItem('gymmanager_perfil') || '{}');
+    const nome = (perfil && perfil.nome) ? perfil.nome : '';
+    const iniciais = nome.trim()
+      ? nome.trim().split(' ').filter(Boolean).slice(0,2).map(p => p[0]).join('').toUpperCase()
+      : '?';
+    if (elAvatar) elAvatar.textContent = iniciais;
+    if (elNome) {
+      elNome.textContent = nome || 'Perfil';
+      elNome.addEventListener('click', function() { window.location.href = 'perfil.html'; });
+    }
+  } catch (e) {}
+  }
+
   const botoesSecao = document.querySelectorAll('.sb-section-header');
 
   botoesSecao.forEach(function(botao) {
@@ -408,7 +463,6 @@ function inicializarInteratividade() {
       }
     });
   });
-}
 
 function mountSidebar() {
   const tagEstilo = document.createElement('style');

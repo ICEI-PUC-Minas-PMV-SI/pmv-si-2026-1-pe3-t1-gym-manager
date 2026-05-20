@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configurações — Gym Manager</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #F4F3EF;
+      --surface:   #FFFFFF;
+      --border:    #E2E0D8;
+      --text:      #1A1918;
+      --muted:     #7A786F;
+      --accent:    #3B3A96;
+      --orange:    #E65100;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      overflow: hidden;
+    }
+
+    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .content { flex: 1; overflow-y: auto; padding: 36px 24px; }
+
+    .page-title {
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .avatar-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .avatar-circle {
+      width: 96px; height: 96px;
+      border-radius: 50%;
+      background: #DDDBE8;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 1px;
+      user-select: none;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .card-header-title { font-size: 18px; font-weight: 600; }
+    .card-header-actions { display: flex; gap: 6px; }
+
+    .btn {
+      height: 36px; padding: 0 16px;
+      border-radius: 8px;
+      font-family: inherit; font-size: 13px; font-weight: 500;
+      cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: opacity 0.15s, background 0.15s, border-color 0.15s;
+      border: none;
+    }
+    .btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-outline { background: var(--surface); border: 1.5px solid var(--border); color: var(--accent); }
+    .btn-outline:hover { border-color: var(--accent); background: #F5F4FE; }
+    .btn-salvar, .btn-cancelar { display: none; }
+
+    .section-label {
+      font-size: 11px; font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+      margin-top: 20px;
+    }
+    .section-label:first-of-type { margin-top: 0; }
+
+    .field-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--bg);
+    }
+    .field-row:last-child { border-bottom: none; }
+
+    .field-icon { width: 18px; height: 18px; flex-shrink: 0; color: var(--muted); }
+    .field-icon svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+    .field-label { font-size: 13px; color: var(--muted); width: 80px; flex-shrink: 0; }
+
+    .field-value { font-size: 13px; font-weight: 500; color: var(--text); flex: 1; }
+    .field-value.vazio { color: var(--muted); font-weight: 400; font-style: italic; }
+
+    .field-input {
+      display: none;
+      flex: 1;
+      height: 32px;
+      padding: 0 10px;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      font-family: inherit; font-size: 13px;
+      color: var(--text); background: var(--bg);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .field-input:focus { border-color: var(--accent); background: var(--surface); }
+
+    .card.editando .field-value  { display: none; }
+    .card.editando .field-input  { display: block; }
+    .card.editando .btn-editar   { display: none; }
+    .card.editando .btn-salvar   { display: inline-flex; }
+    .card.editando .btn-cancelar { display: inline-flex; }
+
+    .alunos-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #EEF2FF; color: var(--accent);
+      font-size: 13px; font-weight: 600;
+      padding: 4px 10px; border-radius: 20px;
+    }
+    .alunos-badge svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+
+    .toast {
+      position: fixed; bottom: 24px; right: 24px;
+      background: #1A1918; color: #fff;
+      font-size: 13px; padding: 10px 16px;
+      border-radius: 8px;
+      display: flex; align-items: center; gap: 8px;
+      opacity: 0; transform: translateY(8px);
+      transition: opacity 0.2s, transform 0.2s;
+      z-index: 1000; pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast svg { width: 14px; height: 14px; stroke: #4ade80; fill: none; stroke-width: 2.5; }
+  </style>
+</head>
+
+<body>
+
+<div id="sidebar-container"></div>
+
+<main class="main">
+  <div class="content">
+
+    <h1 class="page-title">Informações Gerais de Cadastro</h1>
+
+    <div class="avatar-area">
+      <div class="avatar-circle" id="avatarCircle">?</div>
+      <button class="btn btn-outline" onclick="mostrarToast('Funcionalidade de foto em desenvolvimento')">
+        <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Alterar
+      </button>
+    </div>
+
+    <div class="card" id="cardPerfil">
+
+      <div class="card-header">
+        <span class="card-header-title">Perfil</span>
+        <div class="card-header-actions">
+          <button class="btn btn-outline btn-editar" onclick="entrarModoEdicao()">
+            <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Editar
+          </button>
+          <button class="btn btn-primary btn-salvar" onclick="salvarPerfil()">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            Salvar
+          </button>
+          <button class="btn btn-outline btn-cancelar" onclick="cancelarEdicao()">Cancelar</button>
+        </div>
+      </div>
+
+      <p class="section-label">Informação</p>
+
+      <div class="field-row">
+        <span class="field-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+        <span class="field-label">Nome</span>
+        <span class="field-value" id="val-nome"></span>
+        <input class="field-input" id="inp-nome" type="text" placeholder="Seu nome completo" />
+      </div>
+
+      <div class="field-row">
+        <span class="field-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></span>
+        <span class="field-label">Função</span>
+        <span class="field-value" id="val-funcao"></span>
+        <select class="field-input" id="inp-funcao">
+          <option value="">Selecione...</option>
+          <option value="Admin">Admin</option>
+          <option value="Recepcionista">Recepcionista</option>
+          <option value="Instrutor">Instrutor</option>
+          <option value="Gerente">Gerente</option>
+        </select>
+      </div>
+
+      <div class="field-row">
+        <span class="field-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+        <span class="field-label">Endereço</span>
+        <span class="field-value" id="val-endereco"></span>
+        <input class="field-input" id="inp-endereco" type="text" placeholder="Rua, número, bairro" />
+      </div>
+
+      <div class="field-row">
+        <span class="field-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+        <span class="field-label">Cidade</span>
+        <span class="field-value" id="val-cidade"></span>
+        <input class="field-input" id="inp-cidade" type="text" placeholder="Sua cidade" />
+      </div>
+
+      <p class="section-label">Contato</p>
+
+      <div class="field-row">
+        <span class="field-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg></span>
+        <span class="field-label">Telefone</span>
+        <span class="field-value" id="val-telefone"></span>
+        <input class="field-input" id="inp-telefone" type="tel" placeholder="(00) 00000-0000" />
+      </div>
+
+      <div class="field-row">
+        <span class="field-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+        <span class="field-label">Email</span>
+        <span class="field-value" id="val-email"></span>
+        <input class="field-input" id="inp-email" type="email" placeholder="email@academia.com.br" />
+      </div>
+
+      <p class="section-label">Alunos</p>
+
+      <div class="field-row" style="border-bottom:none">
+        <span class="field-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span>
+        <span class="field-label">Registrados</span>
+        <span class="field-value">
+          <span class="alunos-badge">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            <span id="totalAlunos">0</span> alunos
+          </span>
+        </span>
+      </div>
+
+    </div><!-- /card -->
+
+  </div>
+</main>
+
+<!-- toast de feedback -->
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toastMsg">Salvo!</span>
+</div>
+
+<script>
+  // ─────────────────────────────────────────────────────────────
+  //    const perfil = JSON.parse(localStorage.getItem('gymmanager_perfil') || '{}');
+  //    console.log(perfil.nome); // "SharonJacoe"
+  // ─────────────────────────────────────────────────────────────
+  const CHAVE_PERFIL = 'gymmanager_perfil';
+
+  const CAMPOS = [
+    { id: 'nome',     chave: 'nome'     },
+    { id: 'funcao',   chave: 'funcao'   },
+    { id: 'endereco', chave: 'endereco' },
+    { id: 'cidade',   chave: 'cidade'   },
+    { id: 'telefone', chave: 'telefone' },
+    { id: 'email',    chave: 'email'    },
+  ];
+
+  let snapshot = {};
+
+  function carregarPerfil() {
+    const dados = JSON.parse(localStorage.getItem(CHAVE_PERFIL) || '{}');
+
+    CAMPOS.forEach(function(c) {
+      const valor = dados[c.chave] || '';
+      const elValor = document.getElementById('val-' + c.id);
+      const elInput = document.getElementById('inp-' + c.id);
+
+      if (elValor) {
+        elValor.textContent = valor || 'Não informado';
+        elValor.classList.toggle('vazio', !valor);
+      }
+      if (elInput) elInput.value = valor;
+    });
+
+    const nome = dados.nome || '';
+    const iniciais = nome.trim()
+      ? nome.trim().split(' ').filter(Boolean).slice(0, 2).map(p => p[0]).join('').toUpperCase()
+      : '?';
+    document.getElementById('avatarCircle').textContent = iniciais;
+
+    const alunos = JSON.parse(localStorage.getItem('gymmanager_alunos') || '[]');
+    document.getElementById('totalAlunos').textContent = alunos.length;
+  }
+
+  // ── entra no modo edicao ──
+  function entrarModoEdicao() {
+    snapshot = {};
+    CAMPOS.forEach(function(c) {
+      const el = document.getElementById('inp-' + c.id);
+      if (el) snapshot[c.id] = el.value;
+    });
+    document.getElementById('cardPerfil').classList.add('editando');
+    document.getElementById('inp-nome').focus();
+  }
+
+  // ── cancela sem salvar ──
+  function cancelarEdicao() {
+    CAMPOS.forEach(function(c) {
+      const el = document.getElementById('inp-' + c.id);
+      if (el) el.value = snapshot[c.id] || '';
+    });
+    document.getElementById('cardPerfil').classList.remove('editando');
+  }
+
+  // ── salva e sai do modo edicao ──
+  function salvarPerfil() {
+    const dadosAtuais = JSON.parse(localStorage.getItem(CHAVE_PERFIL) || '{}');
+    CAMPOS.forEach(function(c) {
+      const el = document.getElementById('inp-' + c.id);
+      if (el) dadosAtuais[c.chave] = el.value.trim();
+    });
+    localStorage.setItem(CHAVE_PERFIL, JSON.stringify(dadosAtuais));
+    document.getElementById('cardPerfil').classList.remove('editando');
+    carregarPerfil();
+    mostrarToast('Perfil salvo com sucesso!');
+  }
+
+  // ── temporario ──
+  let toastTimer;
+  function mostrarToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  document.addEventListener('DOMContentLoaded', carregarPerfil);
+</script>
+
+<script src="../components/sidebar.js"></script>
+</body>
+</html>
