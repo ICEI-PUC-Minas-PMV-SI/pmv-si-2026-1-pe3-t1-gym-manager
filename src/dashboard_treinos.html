@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dash_Treinos</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #F4F3EF;
+      --surface:      #FFFFFF;
+      --border:       #E2E0D8;
+      --text:         #1A1918;
+      --muted:        #7A786F;
+      --accent:       #4A6CF7;
+      --accent-hover: #3A5CE5;
+      --ocorrer-bg:   #F97316;
+      --ocorrer-tx:   #FFFFFF;
+      --sidebar-w:    56px;
+      --topbar-h:     36px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 0 16px;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .sb-icon {
+      width: 38px; height: 38px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 8px; cursor: pointer;
+      color: var(--muted); border: none; background: none;
+      transition: background 0.15s, color 0.15s;
+    }
+    .sb-icon:hover { background: var(--bg); color: var(--text); }
+    .sb-icon.active { background: #EEF0FE; color: var(--accent); }
+    .sb-icon svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .sb-spacer { flex: 1; }
+
+    /* ── MAIN ── */
+    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+    .topbar {
+      height: var(--topbar-h);
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+      padding: 0 20px;
+      font-size: 11px; color: var(--muted); letter-spacing: 0.02em;
+      flex-shrink: 0;
+    }
+
+    /* ── CONTENT ── */
+    .content { flex: 1; overflow-y: auto; padding: 24px; }
+
+    .page-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 20px; flex-wrap: wrap;
+    }
+
+    .page-title { font-size: 24px; font-weight: 600; letter-spacing: -0.3px; flex: 1; }
+
+    /* ── BUTTONS ── */
+    .btn-agendar {
+      height: 36px; padding: 0 18px;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 8px;
+      font-family: inherit; font-size: 13px; font-weight: 500;
+      cursor: pointer; display: flex; align-items: center; gap: 7px;
+      transition: background 0.15s;
+    }
+    .btn-agendar:hover { background: var(--accent-hover); }
+    .btn-agendar svg { width: 15px; height: 15px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .btn-filter {
+      height: 36px; padding: 0 14px;
+      background: var(--surface); color: var(--text);
+      border: 1px solid var(--border); border-radius: 8px;
+      font-family: inherit; font-size: 13px;
+      cursor: pointer; display: flex; align-items: center; gap: 7px;
+      transition: background 0.15s;
+    }
+    .btn-filter:hover { background: var(--bg); }
+    .btn-filter svg { width: 14px; height: 14px; stroke: var(--muted); fill: none; stroke-width: 2; }
+
+    /* ── STATUS PILL (flutuante) ── */
+    .status-pill {
+      position: relative;
+      display: flex; flex-direction: column; gap: 4px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 12px;
+      min-width: 110px;
+    }
+
+    .pill-option {
+      display: flex; align-items: center; gap: 7px;
+      cursor: pointer; padding: 2px 0;
+      color: var(--muted); font-size: 12.5px;
+      border-radius: 4px;
+      transition: color 0.12s;
+    }
+    .pill-option.active { color: var(--text); font-weight: 500; }
+    .pill-dot {
+      width: 9px; height: 9px; border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot-ocorrer { background: var(--ocorrer-bg); }
+    .dot-ocorridos { background: transparent; border: 1.5px solid var(--border); }
+
+    /* ── TABLE ── */
+    .table-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+
+    thead { background: #FAFAF8; }
+    th {
+      font-size: 12px; font-weight: 500; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.06em;
+      padding: 11px 16px; text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      font-size: 13px; color: var(--text);
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr { transition: background 0.1s; }
+    tbody tr:hover { background: #FAFAF8; }
+
+    /* column widths */
+    th:nth-child(1), td:nth-child(1) { width: 22%; }
+    th:nth-child(2), td:nth-child(2) { width: 18%; }
+    th:nth-child(3), td:nth-child(3) { width: 13%; text-align: center; }
+    th:nth-child(4), td:nth-child(4) { width: 18%; }
+    th:nth-child(5), td:nth-child(5) { width: 13%; text-align: center; }
+    th:nth-child(6), td:nth-child(6) { width: 16%; text-align: right; }
+
+    /* ── GROUP HEADER ── */
+    .group-header td {
+      background: #F4F3EF;
+      font-size: 12.5px; font-weight: 600;
+      color: var(--muted); letter-spacing: 0.04em;
+      padding: 8px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── VAGA BADGE ── */
+    .vaga-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 28px; height: 20px;
+      border-radius: 4px;
+      font-size: 11px; font-weight: 600;
+    }
+    .vaga-ok   { background: #D1FAE5; color: #065F46; }
+    .vaga-warn { background: #FEF3C7; color: #92400E; }
+    .vaga-full { background: #FEE2E2; color: #991B1B; }
+
+    /* ── ACTION BUTTONS ── */
+    .actions { display: flex; align-items: center; justify-content: flex-end; gap: 3px; }
+    .btn-action {
+      width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      border: none; border-radius: 6px; background: none;
+      cursor: pointer; color: var(--muted);
+      transition: background 0.12s, color 0.12s;
+    }
+    .btn-action:hover { background: var(--bg); color: var(--text); }
+    .btn-action.danger:hover { background: #FCEBEB; color: #A32D2D; }
+    .btn-action svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(26,25,24,0.35); z-index: 100;
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--surface); border-radius: 14px;
+      width: 440px; padding: 24px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      animation: modalIn 0.18s ease;
+    }
+    @keyframes modalIn { from { opacity:0; transform: scale(0.96) translateY(6px); } to { opacity:1; transform:none; } }
+
+    .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .modal-header h2 { font-size: 17px; font-weight: 600; }
+    .modal-close {
+      width: 30px; height: 30px; border: none; background: none;
+      cursor: pointer; border-radius: 6px; color: var(--muted);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .modal-close:hover { background: var(--bg); }
+    .modal-close svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+
+    .form-group { margin-bottom: 13px; }
+    .form-group label { display: block; font-size: 11.5px; font-weight: 500; color: var(--muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .form-group input, .form-group select {
+      width: 100%; height: 38px; padding: 0 12px;
+      border: 1px solid var(--border); border-radius: 8px;
+      font-family: inherit; font-size: 13.5px; color: var(--text);
+      background: var(--surface); outline: none;
+      transition: border-color 0.15s;
+    }
+    .form-group input:focus, .form-group select:focus { border-color: var(--accent); }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .modal-actions { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
+    .btn-cancel {
+      height: 36px; padding: 0 16px; background: none;
+      border: 1px solid var(--border); border-radius: 8px;
+      font-family: inherit; font-size: 13px; cursor: pointer; color: var(--muted);
+    }
+    .btn-cancel:hover { background: var(--bg); }
+    .btn-save {
+      height: 36px; padding: 0 20px; background: var(--accent); color: #fff;
+      border: none; border-radius: 8px; font-family: inherit;
+      font-size: 13px; font-weight: 500; cursor: pointer;
+    }
+    .btn-save:hover { background: var(--accent-hover); }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <button class="sb-icon" title="Expandir">
+    <svg viewBox="0 0 24 24"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
+  </button>
+  <button class="sb-icon active" title="Início">
+    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+  </button>
+  <button class="sb-icon" title="Relatórios">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+  </button>
+  <button class="sb-icon" title="Configurações">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+  </button>
+  <div class="sb-spacer"></div>
+  <button class="sb-icon" title="Sair">
+    <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+  </button>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">Dash_Treinos</div>
+  <div class="content">
+
+    <div class="page-header">
+      <h1 class="page-title">Gerenciamento de Treinos</h1>
+
+      <button class="btn-agendar" onclick="abrirModal()">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="12" y1="14" x2="12" y2="18"/><line x1="10" y1="16" x2="14" y2="16"/></svg>
+        Agendar
+      </button>
+
+      <button class="btn-filter" id="btnFiltro">
+        <svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+        <span id="filtroLabel">à ocorrer</span>
+      </button>
+
+      <div class="status-pill" id="statusPill" style="display:none;">
+        <div class="pill-option active" data-val="ocorrer" onclick="selecionarFiltro('ocorrer')">
+          <span class="pill-dot dot-ocorrer"></span> à ocorrer
+        </div>
+        <div class="pill-option" data-val="ocorridos" onclick="selecionarFiltro('ocorridos')">
+          <span class="pill-dot dot-ocorridos"></span> Ocorridos
+        </div>
+      </div>
+    </div>
+
+    <!-- TABELA -->
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Treinador</th>
+            <th>Modalidade</th>
+            <th>Duração (min)</th>
+            <th>Data e Hora</th>
+            <th>Vaga</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaBody"></tbody>
+      </table>
+    </div>
+
+  </div>
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="fecharModalFora(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modalTitulo">Agendar Treino</h2>
+      <button class="modal-close" onclick="fecharModal()">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="inputTreinador">Treinador</label>
+        <input type="text" id="inputTreinador" placeholder="Nome do treinador" />
+      </div>
+      <div class="form-group">
+        <label for="inputModalidade">Modalidade</label>
+        <select id="inputModalidade">
+          <option value="Musculação">Musculação</option>
+          <option value="Funcional">Funcional</option>
+          <option value="Yoga">Yoga</option>
+          <option value="Pilates">Pilates</option>
+          <option value="Spinning">Spinning</option>
+          <option value="CrossFit">CrossFit</option>
+          <option value="Natação">Natação</option>
+          <option value="Boxe">Boxe</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="inputDuracao">Duração (min)</label>
+        <input type="number" id="inputDuracao" placeholder="60" min="10" max="240" />
+      </div>
+      <div class="form-group">
+        <label for="inputVaga">Vagas</label>
+        <input type="number" id="inputVaga" placeholder="10" min="1" max="50" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="inputData">Data</label>
+        <input type="date" id="inputData" />
+      </div>
+      <div class="form-group">
+        <label for="inputHora">Hora</label>
+        <input type="time" id="inputHora" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="inputTipo">Tipo</label>
+      <select id="inputTipo">
+        <option value="Recorrente">Recorrente</option>
+        <option value="Agendado">Agendado</option>
+      </select>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+      <button class="btn-save" onclick="salvarTreino()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── Dados ──
+  let treinos = [
+    { id:1, treinador:"Carlos Silva",   modalidade:"Musculação", duracao:60,  data:"2026-06-05", hora:"07:00", vagas:8,  tipo:"Recorrente", status:"ocorrer" },
+    { id:2, treinador:"Ana Costa",      modalidade:"Yoga",       duracao:45,  data:"2026-06-05", hora:"09:00", vagas:12, tipo:"Recorrente", status:"ocorrer" },
+    { id:3, treinador:"Pedro Lima",     modalidade:"Funcional",  duracao:50,  data:"2026-06-06", hora:"06:30", vagas:2,  tipo:"Recorrente", status:"ocorrer" },
+    { id:4, treinador:"Mariana Rocha",  modalidade:"Pilates",    duracao:55,  data:"2026-06-07", hora:"08:00", vagas:0,  tipo:"Recorrente", status:"ocorrer" },
+    { id:5, treinador:"João Mendes",    modalidade:"CrossFit",   duracao:60,  data:"2026-06-10", hora:"18:00", vagas:5,  tipo:"Agendado",   status:"ocorrer" },
+    { id:6, treinador:"Sofia Teixeira", modalidade:"Spinning",   duracao:45,  data:"2026-06-11", hora:"07:00", vagas:10, tipo:"Agendado",   status:"ocorrer" },
+    { id:7, treinador:"Rafael Nunes",   modalidade:"Boxe",       duracao:60,  data:"2026-06-12", hora:"19:00", vagas:4,  tipo:"Agendado",   status:"ocorrer" },
+    { id:8, treinador:"Camila Ferr.",   modalidade:"Natação",    duracao:40,  data:"2026-06-13", hora:"06:00", vagas:6,  tipo:"Agendado",   status:"ocorrer" },
+    { id:9, treinador:"Carlos Silva",   modalidade:"Musculação", duracao:60,  data:"2026-05-20", hora:"07:00", vagas:8,  tipo:"Recorrente", status:"ocorridos" },
+    { id:10,treinador:"Ana Costa",      modalidade:"Yoga",       duracao:45,  data:"2026-05-21", hora:"09:00", vagas:12, tipo:"Recorrente", status:"ocorridos" },
+    { id:11,treinador:"Pedro Lima",     modalidade:"Funcional",  duracao:50,  data:"2026-05-22", hora:"06:30", vagas:2,  tipo:"Recorrente", status:"ocorridos" },
+    { id:12,treinador:"Mariana Rocha",  modalidade:"Pilates",    duracao:55,  data:"2026-05-23", hora:"08:00", vagas:0,  tipo:"Agendado",   status:"ocorridos" },
+  ];
+
+  let proximoId = 13;
+  let filtroAtual = "ocorrer";
+  let modoEdicao = false;
+  let idEditando = null;
+
+  // ── Renderizar ──
+  function renderizar() {
+    const tbody = document.getElementById("tabelaBody");
+    tbody.innerHTML = "";
+
+    const filtrados = treinos.filter(t => t.status === filtroAtual);
+    const grupos = {};
+    filtrados.forEach(t => {
+      if (!grupos[t.tipo]) grupos[t.tipo] = [];
+      grupos[t.tipo].push(t);
+    });
+
+    const ordem = ["Recorrente", "Agendado"];
+    let total = 0;
+
+    ordem.forEach(grupo => {
+      if (!grupos[grupo]) return;
+      // header do grupo
+      const trH = document.createElement("tr");
+      trH.className = "group-header";
+      trH.innerHTML = `<td colspan="6">${grupo === "Recorrente" ? "Recorrentes" : "Agendados"}</td>`;
+      tbody.appendChild(trH);
+
+      grupos[grupo].forEach(t => {
+        total++;
+        const dataFmt = new Date(t.data + "T" + t.hora).toLocaleString("pt-BR", { day:"2-digit", month:"2-digit", year:"numeric", hour:"2-digit", minute:"2-digit" });
+        const vagaClass = t.vagas === 0 ? "vaga-full" : t.vagas <= 3 ? "vaga-warn" : "vaga-ok";
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td title="${t.treinador}">${t.treinador}</td>
+          <td>${t.modalidade}</td>
+          <td style="text-align:center">${t.duracao}</td>
+          <td>${dataFmt}</td>
+          <td style="text-align:center"><span class="vaga-badge ${vagaClass}">${t.vagas}</span></td>
+          <td>
+            <div class="actions">
+              <button class="btn-action" title="Editar" onclick="editarTreino(${t.id})">
+                <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </button>
+              <button class="btn-action danger" title="Excluir" onclick="excluirTreino(${t.id})">
+                <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+              </button>
+            </div>
+          </td>`;
+        tbody.appendChild(tr);
+      });
+    });
+
+    if (total === 0) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td colspan="6" style="text-align:center;color:var(--muted);padding:36px;font-size:13px;">Nenhum treino encontrado.</td>`;
+      tbody.appendChild(tr);
+    }
+  }
+
+  // ── Filtro ──
+  function selecionarFiltro(val) {
+    filtroAtual = val;
+    document.getElementById("filtroLabel").textContent = val === "ocorrer" ? "à ocorrer" : "Ocorridos";
+    document.querySelectorAll(".pill-option").forEach(el => {
+      el.classList.toggle("active", el.dataset.val === val);
+    });
+    document.getElementById("statusPill").style.display = "none";
+    renderizar();
+  }
+
+  document.getElementById("btnFiltro").addEventListener("click", (e) => {
+    e.stopPropagation();
+    const pill = document.getElementById("statusPill");
+    pill.style.display = pill.style.display === "none" ? "flex" : "none";
+  });
+  document.addEventListener("click", () => {
+    document.getElementById("statusPill").style.display = "none";
+  });
+  document.getElementById("statusPill").addEventListener("click", e => e.stopPropagation());
+
+  // ── Modal ──
+  function abrirModal() {
+    modoEdicao = false; idEditando = null;
+    document.getElementById("modalTitulo").textContent = "Agendar Treino";
+    document.getElementById("inputTreinador").value = "";
+    document.getElementById("inputModalidade").value = "Musculação";
+    document.getElementById("inputDuracao").value = "";
+    document.getElementById("inputVaga").value = "";
+    document.getElementById("inputData").value = "";
+    document.getElementById("inputHora").value = "";
+    document.getElementById("inputTipo").value = "Recorrente";
+    document.getElementById("modalOverlay").classList.add("open");
+    document.getElementById("inputTreinador").focus();
+  }
+
+  function editarTreino(id) {
+    const t = treinos.find(x => x.id === id);
+    if (!t) return;
+    modoEdicao = true; idEditando = id;
+    document.getElementById("modalTitulo").textContent = "Editar Treino";
+    document.getElementById("inputTreinador").value  = t.treinador;
+    document.getElementById("inputModalidade").value = t.modalidade;
+    document.getElementById("inputDuracao").value    = t.duracao;
+    document.getElementById("inputVaga").value       = t.vagas;
+    document.getElementById("inputData").value       = t.data;
+    document.getElementById("inputHora").value       = t.hora;
+    document.getElementById("inputTipo").value       = t.tipo;
+    document.getElementById("modalOverlay").classList.add("open");
+  }
+
+  function fecharModal() { document.getElementById("modalOverlay").classList.remove("open"); }
+  function fecharModalFora(e) { if (e.target === document.getElementById("modalOverlay")) fecharModal(); }
+
+  function salvarTreino() {
+    const treinador  = document.getElementById("inputTreinador").value.trim();
+    const modalidade = document.getElementById("inputModalidade").value;
+    const duracao    = parseInt(document.getElementById("inputDuracao").value) || 60;
+    const vagas      = parseInt(document.getElementById("inputVaga").value) || 10;
+    const data       = document.getElementById("inputData").value;
+    const hora       = document.getElementById("inputHora").value;
+    const tipo       = document.getElementById("inputTipo").value;
+
+    if (!treinador) { alert("Informe o nome do treinador."); return; }
+    if (!data)      { alert("Informe a data."); return; }
+    if (!hora)      { alert("Informe o horário."); return; }
+
+    if (modoEdicao) {
+      const idx = treinos.findIndex(x => x.id === idEditando);
+      if (idx !== -1) treinos[idx] = { ...treinos[idx], treinador, modalidade, duracao, vagas, data, hora, tipo };
+    } else {
+      treinos.push({ id: proximoId++, treinador, modalidade, duracao, vagas, data, hora, tipo, status: filtroAtual });
+    }
+
+    fecharModal();
+    renderizar();
+  }
+
+  function excluirTreino(id) {
+    const t = treinos.find(x => x.id === id);
+    if (!t) return;
+    if (confirm(`Excluir treino de "${t.treinador}" (${t.modalidade})?`)) {
+      treinos = treinos.filter(x => x.id !== id);
+      renderizar();
+    }
+  }
+
+  document.addEventListener("keydown", e => { if (e.key === "Escape") fecharModal(); });
+
+  renderizar();
+</script>
+</body>
+</html>
