@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Academia — Agenda</title>
+  <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/agenda.css" />
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<nav class="sidebar" aria-label="Menu principal">
+  <button class="sb-icon" title="Menu">
+    <svg viewBox="0 0 24 24"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
+  </button>
+
+  <a class="sb-icon" href="alunos.html" title="Alunos">
+    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+  </a>
+
+  <a class="sb-icon active" href="agenda.html" title="Agenda">
+    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+  </a>
+
+  <div class="sb-spacer"></div>
+
+  <button class="sb-icon" title="Sair">
+    <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+  </button>
+</nav>
+
+<!-- ══ MAIN ══ -->
+<main class="main">
+  <div class="topbar">Academia — Agenda</div>
+
+  <div class="content">
+    <h1 class="page-title">Agenda</h1>
+
+    <!-- toolbar -->
+    <div class="toolbar">
+      <button class="btn-primary ml-auto" onclick="abrirModalEvento()">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Novo Evento
+      </button>
+    </div>
+
+    <div class="agenda-layout">
+
+      <!-- Calendário -->
+      <div class="cal-card">
+        <div class="cal-header">
+          <span class="cal-title" id="calTitle">—</span>
+          <div class="cal-nav">
+            <button onclick="navMes(-1)" title="Mês anterior">
+              <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <button onclick="navMes(1)" title="Próximo mês">
+              <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="cal-weekdays">
+          <div class="cal-weekday">Dom</div>
+          <div class="cal-weekday">Seg</div>
+          <div class="cal-weekday">Ter</div>
+          <div class="cal-weekday">Qua</div>
+          <div class="cal-weekday">Qui</div>
+          <div class="cal-weekday">Sex</div>
+          <div class="cal-weekday">Sáb</div>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+
+      <!-- Painel de eventos -->
+      <div class="events-card">
+        <div class="events-header">
+          <div>
+            <div class="events-header-title">Eventos do dia</div>
+            <div class="events-date" id="eventosDataLabel">—</div>
+          </div>
+        </div>
+        <div class="events-list" id="eventosList"></div>
+      </div>
+
+    </div><!-- /agenda-layout -->
+  </div><!-- /content -->
+</main>
+
+<!-- ══ MODAL EVENTO ══ -->
+<div class="modal-overlay" id="modalEvento" onclick="fecharModalFora(event,'modalEvento')">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <h2 id="modalEventoTitulo">Novo Evento</h2>
+      <button class="modal-close" onclick="fecharModal('modalEvento')">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="form-group">
+      <label for="evNome">Título *</label>
+      <input type="text" id="evNome" placeholder="Ex: Aula de Spinning" />
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="evData">Data *</label>
+        <input type="date" id="evData" />
+      </div>
+      <div class="form-group">
+        <label for="evHora">Horário</label>
+        <input type="time" id="evHora" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="evTipo">Tipo</label>
+        <select id="evTipo">
+          <option value="Aula">Aula</option>
+          <option value="Avaliação">Avaliação</option>
+          <option value="Evento">Evento</option>
+          <option value="Manutenção">Manutenção</option>
+          <option value="Outro">Outro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="evInstrutor">Instrutor</label>
+        <input type="text" id="evInstrutor" placeholder="Nome do instrutor" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Cor</label>
+      <div class="color-options" id="colorOptions">
+        <div class="color-opt ec-purple selected" data-color="purple" onclick="selectColor(this)" title="Roxo"></div>
+        <div class="color-opt ec-blue"            data-color="blue"   onclick="selectColor(this)" title="Azul"></div>
+        <div class="color-opt ec-green"           data-color="green"  onclick="selectColor(this)" title="Verde"></div>
+        <div class="color-opt ec-orange"          data-color="orange" onclick="selectColor(this)" title="Laranja"></div>
+        <div class="color-opt ec-red"             data-color="red"    onclick="selectColor(this)" title="Vermelho"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="evObs">Descrição</label>
+      <textarea id="evObs" placeholder="Detalhes do evento…"></textarea>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="fecharModal('modalEvento')">Cancelar</button>
+      <button class="btn-save"   onclick="salvarEvento()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONFIRM ══ -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <h3 id="confirmTitle">Confirmar exclusão</h3>
+    <p  id="confirmMsg">Tem certeza que deseja excluir este item?</p>
+    <div class="confirm-actions">
+      <button class="btn-cancel" onclick="fecharConfirm()">Cancelar</button>
+      <button class="btn-danger" id="confirmBtn">Excluir</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TOAST ══ -->
+<div class="toast" id="toast"></div>
+
+<script src="js/agenda.js"></script>
+</body>
+</html>

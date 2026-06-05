@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gym Manager - Gerenciamento em forma</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playwrite+AR+Guides&display=swap"
+    rel="stylesheet">
+  <style>
+    /* =========================
+   RESET E CONFIGURAÇÕES GERAIS
+========================= */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #f3f3f3;
+      --surface: #ffffff;
+      --text: #111111;
+      --muted: #6b6b6b;
+      --border: #e5e5e5;
+      --accent: #ff7a00;
+      --feature-bg: #d9d8e3;
+      --hero-gradient: linear-gradient(180deg, #f7a35b 0%, #ef8da6 100%);
+    }
+
+    body {
+      font-family: "DM Sans", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    /* =========================
+   LINKS
+========================= */
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    /* =========================
+   HEADER / NAVBAR
+========================= */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav>a img {
+      width: 42px;
+      height: auto;
+    }
+
+    nav ul {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    nav ul li a {
+      font-size: 14px;
+      color: var(--muted);
+      transition: color 0.2s ease;
+    }
+
+    nav ul li a:hover {
+      color: var(--text);
+    }
+
+    /* =========================
+   HERO SECTION
+========================= */
+    #hero {
+      max-width: 1120px;
+      margin: 0 auto;
+      height: 420px;
+      background: var(--hero-gradient);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    #hero h1 {
+      font-size: 64px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+
+    #hero p {
+      font-size: 28px;
+      color: #222222;
+    }
+
+    /* =========================
+   GALLERY SECTION
+========================= */
+    #gallery {
+      max-width: 1120px;
+      margin: 72px auto;
+      padding: 0 24px;
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+
+    #gallery div {
+      flex: 1 1 420px;
+      max-width: 480px;
+    }
+
+    #gallery img {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    /* =========================
+   FEATURES SECTION
+========================= */
+    #features {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 64px 48px;
+      background: var(--feature-bg);
+    }
+
+    #features>div:first-child {
+      margin-bottom: 48px;
+    }
+
+    #features h2 {
+      font-size: 36px;
+      margin-bottom: 8px;
+    }
+
+    #features>div:first-child p {
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    #features>div:last-child {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px 32px;
+    }
+
+    #features article {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    #features article span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border: 1px solid var(--text);
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    #features article h3 {
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+
+    #features article p {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* =========================
+   FOOTER
+========================= */
+    footer {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 48px 24px 64px;
+      background: var(--surface);
+      display: flex;
+      gap: 134px;
+      flex-wrap: wrap;
+    }
+
+    footer>div:first-child {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    footer>div:first-child a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    footer>div:last-child {
+      display: flex;
+      gap: 80px;
+      flex-wrap: wrap;
+    }
+
+    footer h4 {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    footer ul li {
+      margin-bottom: 10px;
+    }
+
+    footer ul li a {
+      font-size: 14px;
+      color: var(--muted);
+      transition: color 0.2s ease;
+    }
+
+    footer ul li a:hover {
+      color: var(--text);
+    }
+
+    /* =========================
+   RESPONSIVIDADE
+========================= */
+    @media (max-width: 900px) {
+      nav {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px;
+      }
+
+      #hero {
+        height: 320px;
+        padding: 0 24px;
+      }
+
+      #hero h1 {
+        font-size: 42px;
+      }
+
+      #hero p {
+        font-size: 22px;
+      }
+
+      #features>div:last-child {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      footer {
+        flex-direction: column;
+      }
+
+      footer>div:last-child {
+        gap: 48px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      #hero h1 {
+        font-size: 32px;
+      }
+
+      #hero p {
+        font-size: 18px;
+      }
+
+      #gallery {
+        margin: 48px auto;
+        gap: 24px;
+      }
+
+      #features {
+        padding: 48px 24px;
+      }
+
+      #features h2 {
+        font-size: 28px;
+      }
+
+      #features>div:first-child p {
+        font-size: 16px;
+      }
+
+      #features>div:last-child {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      #features article h3 {
+        font-size: 20px;
+      }
+
+      footer>div:last-child {
+        flex-direction: column;
+        gap: 32px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================
+       HEADER / NAVBAR
+  ========================== -->
+  <header>
+    <nav>
+      <!-- Logo -->
+      <a href="#">
+        <img src="images\Logo.jpg" alt="Gym Manager Logo" />
+      </a>
+
+      <!-- Menu -->
+      <ul>
+        <li><a href="#">Produtos</a></li>
+        <li><a href="#">Soluções</a></li>
+        <li><a href="#">Comunidade</a></li>
+        <li><a href="#">Recursos</a></li>
+        <li><a href="#">Preços</a></li>
+        <li><a href="#">Contatos</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- =========================
+       HERO SECTION
+  ========================== -->
+  <main>
+
+    <section id="hero">
+      <div>
+        <h1>GYM MANAGER</h1>
+        <p>Gerenciamento em forma</p>
+      </div>
+    </section>
+
+    <!-- =========================
+         IMAGES SECTION
+    ========================== -->
+    <section id="gallery">
+      <div>
+        <img src="images\Recepção.jpg" alt="Recepção" />
+      </div>
+
+      <div>
+        <img src="images\Atendimento.jpg" alt="Atendimento" />
+      </div>
+    </section>
+
+    <!-- =========================
+         FEATURES SECTION
+    ========================== -->
+    <section id="features">
+      <div>
+        <h2>Gestão inteligente para sua academia</h2>
+        <p>
+          Mais controle, mais alunos satisfeitos e mais crescimento
+        </p>
+      </div>
+
+      <div>
+
+        <!-- Feature 1 -->
+        <article>
+          <div>
+            <span>ⓘ</span>
+          </div>
+          <div>
+            <h3>Controle Total</h3>
+            <p>
+              Gerencie alunos, planos e treinos em um só lugar, sem
+              complicação.
+            </p>
+          </div>
+        </article>
+
+        <!-- Feature 2 -->
+        <article>
+          <div>
+            <span>ⓘ</span>
+          </div>
+          <div>
+            <h3>Economia de Tempo</h3>
+            <p>
+              Reduza tarefas manuais com automações simples e eficientes.
+            </p>
+          </div>
+        </article>
+
+        <!-- Feature 3 -->
+        <article>
+          <div>
+            <span>ⓘ</span>
+          </div>
+          <div>
+            <h3>Crescimento Escalável</h3>
+            <p>
+              Tenha dados estratégicos para expandir sua academia com
+              segurança.
+            </p>
+          </div>
+        </article>
+
+        <!-- Feature 4 -->
+        <article>
+          <div>
+            <span>ⓘ</span>
+          </div>
+          <div>
+            <h3>Mais Matrículas</h3>
+            <p>
+              Automatize processos e foque no que importa: atrair e reter
+              alunos.
+            </p>
+          </div>
+        </article>
+
+        <!-- Feature 5 -->
+        <article>
+          <div>
+            <span>ⓘ</span>
+          </div>
+          <div>
+            <h3>Experiência do Aluno</h3>
+            <p>
+              Ofereça check-in rápido e comunicação prática com seus alunos.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+  <footer>
+
+    <!-- Social Media -->
+    <div>
+      <a href="#" aria-label="X (Twitter)"><img src="images\twitter.png" style="width: 24px; height: 24px;"></a>
+      <a href="#" aria-label="Instagram"><img src="images\instagram.png" style="width: 24px; height: 24px;"></a>
+      <a href="#" aria-label="YouTube"><img src="images\youtube.png" style="width: 24px; height: 24px;"></a>
+      <a href="#" aria-label="LinkedIn"><img src="images\business.png" style="width: 24px; height: 24px;"></a>
+    </div>
+
+    <!-- Footer Links -->
+    <div>
+
+      <!-- Casos de Sucesso -->
+      <section>
+        <h4>Casos de Sucesso</h4>
+        <ul>
+          <li><a href="#">Biofit</a></li>
+          <li><a href="#">SmartGym</a></li>
+          <li><a href="#">BodyFit</a></li>
+          <li><a href="#">LuluGym</a></li>
+        </ul>
+      </section>
+
+      <!-- Explorar -->
+      <section>
+        <h4>Explorar</h4>
+        <ul>
+          <li><a href="#">Produtos</a></li>
+          <li><a href="#">Termos de Uso</a></li>
+          <li><a href="#">Política de Privacidade</a></li>
+          <li><a href="#">Preços</a></li>
+        </ul>
+      </section>
+
+      <!-- Recursos -->
+      <section>
+        <h4>Recursos</h4>
+        <ul>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Boas Práticas</a></li>
+          <li><a href="#">Suporte</a></li>
+        </ul>
+      </section>
+
+    </div>
+  </footer>
+  <script>
+    // Aguarda o carregamento completo do HTML
+    document.addEventListener("DOMContentLoaded", () => {
+      // Seleciona os elementos do menu
+      const nav = document.querySelector("nav");
+      const menu = document.querySelector("nav ul");
+
+      // Cria o botão hamburguer
+      const menuButton = document.createElement("button");
+      menuButton.setAttribute("type", "button");
+      menuButton.setAttribute("aria-label", "Abrir menu");
+      menuButton.setAttribute("aria-expanded", "false");
+      menuButton.classList.add("menu-toggle");
+      menuButton.innerHTML = "☰";
+
+      // Insere o botão no final da navegação
+      nav.appendChild(menuButton);
+
+      // Função para verificar o tamanho da tela
+      function handleResize() {
+        if (window.innerWidth <= 900) {
+          // Exibe o botão hamburguer
+          menuButton.style.display = "block";
+
+          // Esconde o menu inicialmente
+          if (!menu.classList.contains("active")) {
+            menu.style.display = "none";
+          }
+        } else {
+          // Em telas grandes o menu fica sempre visível
+          menuButton.style.display = "none";
+          menu.style.display = "flex";
+          menu.classList.remove("active");
+          menuButton.setAttribute("aria-expanded", "false");
+          menuButton.innerHTML = "☰";
+        }
+      }
+
+      // Evento de clique no botão hamburguer
+      menuButton.addEventListener("click", () => {
+        const isOpen = menu.classList.toggle("active");
+
+        // Alterna visibilidade do menu
+        menu.style.display = isOpen ? "flex" : "none";
+
+        // Atualiza atributos de acessibilidade
+        menuButton.setAttribute("aria-expanded", isOpen);
+        menuButton.innerHTML = isOpen ? "✕" : "☰";
+        menuButton.setAttribute(
+          "aria-label",
+          isOpen ? "Fechar menu" : "Abrir menu"
+        );
+      });
+
+      // Fecha o menu ao clicar em um link
+      const links = menu.querySelectorAll("a");
+      links.forEach((link) => {
+        link.addEventListener("click", () => {
+          if (window.innerWidth <= 900) {
+            menu.classList.remove("active");
+            menu.style.display = "none";
+            menuButton.setAttribute("aria-expanded", "false");
+            menuButton.innerHTML = "☰";
+            menuButton.setAttribute("aria-label", "Abrir menu");
+          }
+        });
+      });
+
+      // Fecha o menu ao redimensionar a janela
+      window.addEventListener("resize", handleResize);
+
+      // Executa ao carregar a página
+      handleResize();
+    });
+  </script>
+
+</body>
+
+</html>
