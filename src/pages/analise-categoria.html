@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Análise por Categoria — Gym Manager</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/shared.css" />
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <style>
+    .analytics-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    }
+
+    .kpi-title {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .kpi-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .chart-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      height: 420px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .chart-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .chart-filter {
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 13px;
+      color: var(--text);
+      background: var(--bg);
+      outline: none;
+      cursor: pointer;
+    }
+    .chart-filter:focus { border-color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<div id="sidebar-container"></div>
+
+<main class="main">
+  <div class="content">
+    <h1 class="page-title">Desempenho de Modalidades</h1>
+
+    <div class="analytics-layout">
+      
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <span class="kpi-title">Total de Check-ins (Mês)</span>
+          <span class="kpi-value" id="kpiTotal">1.248</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-title">Modalidade Mais Popular</span>
+          <span class="kpi-value" style="color: var(--accent);" id="kpiPop">Musculação</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-title">Menor Retenção</span>
+          <span class="kpi-value" style="color: #E65100;" id="kpiMenos">Pilates</span>
+        </div>
+      </div>
+
+      <div class="chart-container">
+        <div class="chart-header">
+          <h2 class="chart-title">Distribuição de Acessos por Modalidade</h2>
+          <select class="chart-filter" id="filtroPeriodo">
+            <option value="mes">Últimos 30 dias</option>
+            <option value="semana">Últimos 7 dias</option>
+            <option value="ano">Este Ano</option>
+          </select>
+        </div>
+        <canvas id="graficoCategorias"></canvas>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<script src="../components/sidebar.js"></script>
+
+<script>
+  // script pra inicializar e popular o grafico via chart.js
+  document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('graficoCategorias').getContext('2d');
+    const labelsCategorias = ['Musculação', 'Crossfit', 'Spinning', 'Zumba', 'Pilates', 'Yoga'];
+    const dadosCheckins = [650, 220, 140, 110, 80, 48];
+
+    // confg do grafico de Barras
+    const chartConfig = {
+      type: 'bar',
+      data: {
+        labels: labelsCategorias,
+        datasets: [{
+          label: 'Quantidade de Check-ins',
+          data: dadosCheckins,
+          backgroundColor: [
+            '#3B3A96', // cor primaria
+            '#E65100', // laranja
+            '#878eeb', 
+            '#CECBF6', 
+            '#e49864',
+            '#F5C4B3'
+          ],
+          borderWidth: 0,
+          borderRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }, 
+          tooltip: {
+            backgroundColor: '#1A1918',
+            padding: 12,
+            titleFont: { family: 'DM Sans', size: 13 },
+            bodyFont: { family: 'DM Sans', size: 14, weight: 'bold' },
+            cornerRadius: 8
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: { color: '#E2E0D8', borderDash: [5, 5] },
+            ticks: { font: { family: 'DM Sans', size: 12 }, color: '#7A786F' }
+          },
+          x: {
+            grid: { display: false },
+            ticks: { font: { family: 'DM Sans', weight: '500', size: 13 }, color: '#1A1918' }
+          }
+        }
+      }
+    };
+
+    // renderiza o grafico
+    let meuGrafico = new Chart(ctx, chartConfig);
+
+    // simular a mudanca de dados qdn alterar o filtro
+    document.getElementById('filtroPeriodo').addEventListener('change', function(e) {
+      const periodo = e.target.value;
+      let novosDados = [];
+
+      if (periodo === 'semana') novosDados = [150, 60, 45, 30, 20, 10];
+      else if (periodo === 'mes') novosDados = [650, 220, 140, 110, 80, 48];
+      else if (periodo === 'ano') novosDados = [7800, 2600, 1680, 1320, 960, 570];
+
+      meuGrafico.data.datasets[0].data = novosDados;
+      meuGrafico.update();
+    });
+  });
+</script>
+</body>
+</html>

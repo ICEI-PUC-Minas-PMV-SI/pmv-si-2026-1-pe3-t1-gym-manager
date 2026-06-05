@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Análise por Dia — Gym Manager</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/shared.css" />
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <style>
+    .analytics-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    }
+
+    .kpi-title {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .kpi-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .chart-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      height: 380px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chart-header {
+      margin-bottom: 20px;
+    }
+
+    .chart-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    
+    .chart-canvas-wrap {
+      flex: 1;
+      position: relative;
+    }
+
+    @media (max-width: 900px) {
+      .charts-grid { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="sidebar-container"></div>
+
+<main class="main">
+  <div class="content">
+    <h1 class="page-title">Fluxo e Horários de Pico</h1>
+
+    <div class="analytics-layout">
+      
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <span class="kpi-title">Média Diária (Semana Atual)</span>
+          <span class="kpi-value" id="kpiMedia">245</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-title">Dia Mais Movimentado</span>
+          <span class="kpi-value" style="color: var(--accent);" id="kpiDia">Segunda-feira</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-title">Horário de Pico</span>
+          <span class="kpi-value" style="color: #E65100;" id="kpiHora">18:00 - 20:00</span>
+        </div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-container">
+          <div class="chart-header">
+            <h2 class="chart-title">Frequência por Dia da Semana</h2>
+          </div>
+          <div class="chart-canvas-wrap">
+            <canvas id="graficoDias"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <div class="chart-header">
+            <h2 class="chart-title">Acessos por Horário</h2>
+          </div>
+          <div class="chart-canvas-wrap">
+            <canvas id="graficoHorarios"></canvas>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<script src="../components/sidebar.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    
+    Chart.defaults.font.family = "'DM Sans', sans-serif";
+    Chart.defaults.color = '#7A786F';
+
+    // ── REQUENCIA POR DIA ──
+    const ctxDias = document.getElementById('graficoDias').getContext('2d');
+    new Chart(ctxDias, {
+      type: 'line',
+      data: {
+        labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+        datasets: [{
+          label: 'Check-ins',
+          data: [320, 290, 310, 280, 240, 150, 80],
+          borderColor: '#3B3A96',
+          backgroundColor: 'rgba(59, 58, 150, 0.1)',
+          borderWidth: 3,
+          tension: 0.4,
+          fill: true,
+          pointBackgroundColor: '#FFFFFF',
+          pointBorderColor: '#3B3A96',
+          pointBorderWidth: 2,
+          pointRadius: 4,
+          pointHoverRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#1A1918', padding: 12, cornerRadius: 8,
+            titleFont: { size: 13 }, bodyFont: { size: 14, weight: 'bold' }
+          }
+        },
+        scales: {
+          y: { beginAtZero: true, grid: { color: '#E2E0D8', borderDash: [5, 5] } },
+          x: { grid: { display: false }, ticks: { weight: '500', color: '#1A1918' } }
+        }
+      }
+    });
+
+    // ── HORARIOS DE PICO ──
+    const ctxHorarios = document.getElementById('graficoHorarios').getContext('2d');
+    new Chart(ctxHorarios, {
+      type: 'bar',
+      data: {
+        labels: ['06h', '08h', '10h', '12h', '14h', '16h', '18h', '20h', '22h'],
+        datasets: [{
+          label: 'Média de Alunos',
+          data: [45, 80, 35, 60, 25, 40, 150, 110, 30],
+          backgroundColor: '#E65100', // laranja
+          borderRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#1A1918', padding: 12, cornerRadius: 8,
+            titleFont: { size: 13 }, bodyFont: { size: 14, weight: 'bold' }
+          }
+        },
+        scales: {
+          y: { beginAtZero: true, grid: { color: '#E2E0D8', borderDash: [5, 5] } },
+          x: { grid: { display: false }, ticks: { weight: '500', color: '#1A1918' } }
+        }
+      }
+    });
+
+  });
+</script>
+</body>
+</html>

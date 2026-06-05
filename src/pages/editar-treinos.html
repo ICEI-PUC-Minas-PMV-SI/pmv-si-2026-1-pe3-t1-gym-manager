@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configurações de Treinos — Gym Manager</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/shared.css" />
+  <style>
+    
+    .toolbar {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 24px;
+    }
+    .search-wrap {
+      position: relative; display: flex; align-items: center; width: 300px;
+    }
+    .search-wrap svg {
+      position: absolute; left: 12px; width: 16px; height: 16px;
+      stroke: var(--muted); fill: none; stroke-width: 2;
+    }
+    .search-wrap input {
+      width: 100%; height: 38px; padding: 0 16px 0 36px;
+      border: 1px solid var(--border); border-radius: 8px;
+      background: var(--surface); font-family: inherit; font-size: 13px;
+    }
+
+    .btn-primary {
+      height: 38px; padding: 0 16px; background: var(--accent); color: #fff;
+      border: none; border-radius: 8px; font-family: inherit; font-size: 13.5px;
+      font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px;
+    }
+    .btn-primary:hover { opacity: 0.9; }
+
+    .fichas-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .ficha-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex; flex-direction: column;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .ficha-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    }
+
+    .ficha-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .ficha-title { font-size: 16px; font-weight: 600; color: var(--text); }
+    
+    .badge-nivel {
+      font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 4px;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .nivel-iniciante { background: #E8F5E9; color: #2E7D32; }
+    .nivel-intermedio { background: #FFF3E0; color: #E65100; }
+    .nivel-avancado { background: #FCEBEB; color: #C0392B; }
+
+    .ficha-meta {
+      font-size: 13px; color: var(--muted); margin-bottom: 16px;
+      display: flex; flex-direction: column; gap: 6px; flex: 1;
+    }
+    .ficha-meta strong { color: var(--text); font-weight: 500; }
+
+    .ficha-actions {
+      display: flex; gap: 8px; border-top: 1px solid var(--border);
+      padding-top: 16px; margin-top: auto;
+    }
+    .btn-outline {
+      flex: 1; height: 32px; background: none; border: 1px solid var(--border);
+      border-radius: 6px; color: var(--text); font-family: inherit; font-size: 13px;
+      cursor: pointer; font-weight: 500; transition: background 0.15s;
+    }
+    .btn-outline:hover { background: var(--bg); }
+    .btn-outline.danger { color: var(--danger); border-color: #F5C4B3; }
+    .btn-outline.danger:hover { background: var(--danger-bg); }
+
+    /* modal */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(26,25,24,0.4);
+      z-index: 200; align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--surface); border-radius: 12px; width: 480px; max-width: 90vw;
+      padding: 24px; box-shadow: 0 12px 40px rgba(0,0,0,0.15); animation: modalIn 0.2s ease;
+    }
+    @keyframes modalIn { from{ opacity:0; transform: scale(0.96) translateY(10px); } to{ opacity:1; transform:none; } }
+    
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .modal-header h2 { font-size: 18px; font-weight: 600; }
+    .modal-close { border: none; background: none; cursor: pointer; color: var(--muted); }
+    .modal-close svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2; fill: none; }
+    
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px;
+      font-family: inherit; font-size: 14px; background: var(--surface); outline: none;
+    }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); }
+    
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
+  </style>
+</head>
+<body>
+
+<div id="sidebar-container"></div>
+
+<main class="main">
+  <div class="content">
+    <h1 class="page-title">Fichas Padrão e Modelos</h1>
+
+    <div class="toolbar">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="searchInput" placeholder="Procurar ficha..." oninput="renderizarFichas()" />
+      </div>
+      <button class="btn-primary" onclick="abrirModal()">
+        <svg viewBox="0 0 24 24" style="width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nova Ficha
+      </button>
+    </div>
+
+    <div class="fichas-grid" id="fichasGrid">
+      </div>
+  </div>
+</main>
+
+<div class="modal-overlay" id="modalFicha" onclick="fecharModalFora(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modalTitle">Criar Nova Ficha</h2>
+      <button class="modal-close" onclick="fecharModal()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+
+    <div class="form-group">
+      <label>Nome da Ficha</label>
+      <input type="text" id="inpNome" placeholder="Ex: Hipertrofia A" />
+    </div>
+    
+    <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+      <div>
+        <label>Objetivo</label>
+        <select id="inpObjetivo">
+          <option value="Hipertrofia">Hipertrofia</option>
+          <option value="Emagrecimento">Emagrecimento</option>
+          <option value="Condicionamento">Condicionamento</option>
+          <option value="Reabilitação">Reabilitação</option>
+        </select>
+      </div>
+      <div>
+        <label>Nível</label>
+        <select id="inpNivel">
+          <option value="Iniciante">Iniciante</option>
+          <option value="Intermédio">Intermédio</option>
+          <option value="Avançado">Avançado</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Estrutura Base (Exercícios e Séries)</label>
+      <textarea id="inpEstrutura" placeholder="Ex:&#10;Supino Reto - 4x10&#10;Crucifixo - 3x12"></textarea>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-outline" style="width:auto; border:none;" onclick="fecharModal()">Cancelar</button>
+      <button class="btn-primary" onclick="salvarFicha()">Guardar Ficha</button>
+    </div>
+  </div>
+</div>
+
+<script src="../components/sidebar.js"></script>
+<script>
+  let fichas = [
+    { id: 1, nome: "Adaptação Geral", objetivo: "Condicionamento", nivel: "Iniciante", estrutura: "Esteira - 15 min\nLeg Press - 3x15\nPuxada Frontal - 3x15\nAbdominal - 3x20" },
+    { id: 2, nome: "Hipertrofia A (Peito/Tríceps)", objetivo: "Hipertrofia", nivel: "Intermédio", estrutura: "Supino Reto - 4x10\nSupino Inclinado - 3x12\nTríceps Polia - 4x12\nTríceps Testa - 3x10" },
+    { id: 3, nome: "Cardio Intenso (HIIT)", objetivo: "Emagrecimento", nivel: "Avançado", estrutura: "Tiro na Esteira - 10x (1min corre / 1min descansa)\nBurpees - 4x15\nCorda - 5 min" }
+  ];
+  let modoEdicao = false;
+  let idEdicao = null;
+
+  function renderizarFichas() {
+    const termo = document.getElementById('searchInput').value.toLowerCase();
+    const grid = document.getElementById('fichasGrid');
+    grid.innerHTML = '';
+
+    const filtradas = fichas.filter(f => f.nome.toLowerCase().includes(termo) || f.objetivo.toLowerCase().includes(termo));
+
+    if (filtradas.length === 0) {
+      grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:var(--muted); padding: 40px 0;">Nenhuma ficha encontrada.</p>`;
+      return;
+    }
+
+    filtradas.forEach(f => {
+      let classeNivel = 'nivel-iniciante';
+      if(f.nivel === 'Intermédio') classeNivel = 'nivel-intermedio';
+      if(f.nivel === 'Avançado') classeNivel = 'nivel-avancado';
+
+      grid.innerHTML += `
+        <div class="ficha-card">
+          <div class="ficha-header">
+            <h3 class="ficha-title">${f.nome}</h3>
+            <span class="badge-nivel ${classeNivel}">${f.nivel}</span>
+          </div>
+          <div class="ficha-meta">
+            <span><strong>Objetivo:</strong> ${f.objetivo}</span>
+            <div style="margin-top:8px; font-size:12px; white-space:pre-wrap; background:var(--bg); padding:10px; border-radius:6px; max-height:80px; overflow-y:auto;">${f.estrutura}</div>
+          </div>
+          <div class="ficha-actions">
+            <button class="btn-outline" onclick="editarFicha(${f.id})">Editar</button>
+            <button class="btn-outline danger" onclick="excluirFicha(${f.id})">Excluir</button>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  function abrirModal() {
+    modoEdicao = false; idEdicao = null;
+    document.getElementById('modalTitle').textContent = 'Criar Nova Ficha';
+    document.getElementById('inpNome').value = '';
+    document.getElementById('inpEstrutura').value = '';
+    document.getElementById('modalFicha').classList.add('open');
+  }
+
+  function fecharModal() {
+    document.getElementById('modalFicha').classList.remove('open');
+  }
+
+  function fecharModalFora(e) {
+    if (e.target === document.getElementById('modalFicha')) fecharModal();
+  }
+
+  function editarFicha(id) {
+    const ficha = fichas.find(f => f.id === id);
+    if(!ficha) return;
+    modoEdicao = true; idEdicao = id;
+    document.getElementById('modalTitle').textContent = 'Editar Ficha';
+    document.getElementById('inpNome').value = ficha.nome;
+    document.getElementById('inpObjetivo').value = ficha.objetivo;
+    document.getElementById('inpNivel').value = ficha.nivel;
+    document.getElementById('inpEstrutura').value = ficha.estrutura;
+    document.getElementById('modalFicha').classList.add('open');
+  }
+
+  function salvarFicha() {
+    const nome = document.getElementById('inpNome').value.trim();
+    const objetivo = document.getElementById('inpObjetivo').value;
+    const nivel = document.getElementById('inpNivel').value;
+    const estrutura = document.getElementById('inpEstrutura').value.trim();
+
+    if(!nome || !estrutura) { alert('Preencha o nome e a estrutura do treino.'); return; }
+
+    if (modoEdicao) {
+      const idx = fichas.findIndex(f => f.id === idEdicao);
+      if(idx !== -1) fichas[idx] = { id: idEdicao, nome, objetivo, nivel, estrutura };
+    } else {
+      fichas.push({ id: Date.now(), nome, objetivo, nivel, estrutura });
+    }
+    fecharModal();
+    renderizarFichas();
+  }
+
+  function excluirFicha(id) {
+    if(confirm('Tem a certeza que deseja excluir esta ficha padrão?')) {
+      fichas = fichas.filter(f => f.id !== id);
+      renderizarFichas();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', renderizarFichas);
+</script>
+</body>
+</html>
