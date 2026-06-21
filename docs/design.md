@@ -28,7 +28,8 @@
 4.3 Protótipos das Interfaces — Análises Complementares
 Tela de Login
 
-![alt text](gym.png)
+<img width="512" height="287" alt="gym" src="https://github.com/user-attachments/assets/7831be68-167a-4a93-be0d-17989b312fbc" />
+
 
 1. Objetivo da Tela
 A tela de login é o ponto de entrada do sistema. Seu objetivo é autenticar o usuário de forma segura e eficiente, solicitando as credenciais de acesso (usuário e senha) antes de conceder acesso à plataforma administrativa.
@@ -53,7 +54,8 @@ Controle do usuário: A tela é direta e não impõe fluxos adicionais antes de 
 
 Tela de Dashboard — Aulas do Dia
 
-![alt text](<dashboard aula dia.png>)
+<img width="1909" height="1075" alt="dashboard aula dia" src="https://github.com/user-attachments/assets/d05bfe1d-914b-407a-9bde-a34b37356c62" />
+
 
 1. Objetivo da Tela
 O Dashboard funciona como painel de controle operacional do sistema. Seu objetivo é oferecer uma visão rápida e consolidada do dia: aulas agendadas, vagas disponíveis e alunos inscritos por modalidade e horário. Serve como ponto de partida para as demais funcionalidades do sistema.
@@ -75,7 +77,8 @@ Controle do usuário: A navegação lateral permite acesso rápido a qualquer se
 
 Tela de Informações Gerais dos Treinos
 
-![alt text](<gerenciamento de treinos.png>)
+<img width="1908" height="1075" alt="gerenciamento de treinos" src="https://github.com/user-attachments/assets/92166f0b-10e7-41fb-bd0e-68730435f004" />
+
 
 1. Objetivo da Tela
 Tela administrativa para gerenciar as modalidades de treino e os instrutores cadastrados no sistema. Permite adicionar, editar e excluir registros em dois painéis paralelos (Modalidades e Instrutores), otimizando o fluxo de configuração da plataforma por parte dos administradores.
@@ -96,8 +99,7 @@ Hierarquia visual: O título 'Informações Gerais dos Treinos' está centraliza
 
 AGENDAR TREINO - TREINO AGENDADO
 
-![alt text](<treino agendado.png>)
-
+<img width="900" height="792" alt="treino agendado" src="https://github.com/user-attachments/assets/96f29f64-eb10-4565-a481-5d48dad17ff9" />
 
 
 1. Objetivo da Tela
@@ -135,7 +137,9 @@ Reduzir carga de memória: Atende. O calendário visual elimina a necessidade de
 
 
 AGENDAR TREINO - TREINO RECORRENTE
-![alt text](<treino recorrente.png>)
+
+<img width="906" height="778" alt="treino recorrente" src="https://github.com/user-attachments/assets/52422758-b13f-4e7b-98a7-6fa0a5ccc649" />
+
 
 
 1. Objetivo da Tela
@@ -176,7 +180,8 @@ Reduzir carga de memória: Atende. Os dias da semana listados por extenso elimin
 
 Menu Lateral de Navegação
 
-![alt text](<menu lateral.png>)
+<img width="898" height="1078" alt="menu lateral" src="https://github.com/user-attachments/assets/8c725755-9199-42e7-95a9-a5e8dff375ff" />
+
 
 1. Objetivo da Tela
 O menu lateral é o elemento de navegação global do sistema. Seu objetivo é permitir que o usuário acesse qualquer seção da plataforma de forma rápida e organizada, a partir de qualquer tela. Quando expandido, exibe o logotipo do sistema, os grupos de navegação e o botão de logout. Quando recolhido, exibe apenas ícones, liberando espaço para o conteúdo principal.
@@ -206,7 +211,8 @@ Feedback informativo: O destaque do item ativo informa ao usuário onde ele se e
 
 Tela de Informações Gerais de Cadastro (Perfil)
 
-![alt text](informacaocadastro.png)
+<img width="1912" height="1458" alt="informacaocadastro" src="https://github.com/user-attachments/assets/3ad96fe2-b4ab-4ddf-a9dc-a34f70f575f9" />
+
 
 1. Objetivo da Tela
 A tela de Informações Gerais de Cadastro exibe o perfil completo do usuário logado no sistema. Seu objetivo é centralizar os dados pessoais e de contato do administrador ou instrutor, permitindo visualizar e editar informações como nome, função, endereço, telefone, e-mail e redes sociais vinculadas. A tela também exibe a quantidade de alunos registrados pelo usuário.
@@ -240,7 +246,8 @@ Reduzir carga de memória: Todos os dados estão visíveis na mesma tela, sem ne
 
 Tela de Check-in por Dia
 
-![alt text](checkindia.png)
+<img width="1915" height="1075" alt="checkindia" src="https://github.com/user-attachments/assets/61d36423-a185-4989-8590-2fcc989c4e69" />
+
 
 1. Objetivo da Tela
 Tela de análise com gráfico de linha exibindo a frequência de check-ins por categoria ao longo dos dias do mês. Permite filtrar por Categoria e Mês, oferecendo ao gestor uma visão temporal do engajamento dos alunos por modalidade.
@@ -264,7 +271,8 @@ Destaque cromático do cabeçalho: O uso de cor no cabeçalho da tela diferencia
 
  Tela de Gerenciamento de Alunos 
 
-![alt text](<gerenciamento alunos.png>)
+<img width="821" height="505" alt="gerenciamento alunos" src="https://github.com/user-attachments/assets/ee021bee-1823-4c32-8065-10db784b9f8c" />
+
 
 
 1. Objetivo da Tela 
@@ -307,7 +315,8 @@ Cabeçalho fixo e claro: Os rótulos das colunas são objetivos e facilitam a or
 
 Tela de Histórico e Relatórios 
 
-![alt text](<historico relatorios.png>)
+<img width="929" height="566" alt="historico relatorios" src="https://github.com/user-attachments/assets/621d86b9-c37a-44ea-a2f1-5ee7f4ed43c7" />
+
 
 
 1. Objetivo da Tela 
