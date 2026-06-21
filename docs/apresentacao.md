@@ -4,4 +4,8 @@ Abaixo estão disponibilizados os materiais referentes à apresentação final, 
 
 https://github.com/user-attachments/assets/49983a7c-6ff0-4f4a-b2ec-836949bf528f
 
-[Apresentação Gym-Manager.pptx](https://github.com/user-attachments/files/29184438/Apresentacao.Gym-Manager.pptx)
+Versão em PDF: [Apresentação Gym-Manager.pptx.pdf](https://github.com/user-attachments/files/29184473/Apresentacao.Gym-Manager.pptx.pdf)
+
+
+Versão em PPTX: [Apresentação Gym-Manager.pptx](https://github.com/user-attachments/files/29184438/Apresentacao.Gym-Manager.pptx)
+
